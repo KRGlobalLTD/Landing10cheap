@@ -1,10 +1,16 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { FormProgress } from '@/components/form/form-progress';
 import { StepNavigation } from '@/components/form/step-navigation';
+import { Button } from '@/components/ui/button';
 import { FormStepDefinition, FormStepKey } from '@/lib/types/form';
+import {
+  clearFormDraftFromStorage,
+  readFormDraftFromStorage,
+  saveFormDraftToStorage
+} from '@/lib/utils/storage';
 import { ActivityStep } from './steps/activity-step';
 import { ContactDeliveryStep } from './steps/contact-delivery-step';
 import { ContentStep } from './steps/content-step';
@@ -117,17 +123,82 @@ const STEP_DEFINITIONS: StepDefinition[] = [
   }
 ];
 
+function mergeFormDataWithInitial(data: Partial<FormData>): FormData {
+  return {
+    identity: {
+      ...INITIAL_FORM_DATA.identity,
+      ...data.identity
+    },
+    business: {
+      ...INITIAL_FORM_DATA.business,
+      ...data.business
+    },
+    offer: {
+      ...INITIAL_FORM_DATA.offer,
+      ...data.offer
+    },
+    design: {
+      ...INITIAL_FORM_DATA.design,
+      ...data.design
+    },
+    content: {
+      ...INITIAL_FORM_DATA.content,
+      ...data.content
+    },
+    contact: {
+      ...INITIAL_FORM_DATA.contact,
+      ...data.contact
+    }
+  };
+}
+
 export function FormShell() {
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
   const [formFiles, setFormFiles] = useState<FormFilesData>(INITIAL_FORM_FILES);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [hasHydratedFromStorage, setHasHydratedFromStorage] = useState(false);
 
   const totalSteps = STEP_DEFINITIONS.length;
   const currentStepNumber = currentStepIndex + 1;
   const currentStep = STEP_DEFINITIONS[currentStepIndex];
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === totalSteps - 1;
+
+  useEffect(() => {
+    const persistedDraft = readFormDraftFromStorage();
+
+    if (persistedDraft) {
+      setFormData(mergeFormDataWithInitial(persistedDraft.data));
+
+      setCurrentStepIndex(() => {
+        const maxStepIndex = totalSteps - 1;
+
+        if (persistedDraft.currentStepIndex < 0) {
+          return 0;
+        }
+
+        if (persistedDraft.currentStepIndex > maxStepIndex) {
+          return maxStepIndex;
+        }
+
+        return persistedDraft.currentStepIndex;
+      });
+    }
+
+    setHasHydratedFromStorage(true);
+  }, [totalSteps]);
+
+  useEffect(() => {
+    if (!hasHydratedFromStorage) {
+      return;
+    }
+
+    saveFormDraftToStorage({
+      data: formData,
+      currentStepIndex
+    });
+  }, [currentStepIndex, formData, hasHydratedFromStorage]);
 
   const onSectionChange = <K extends keyof FormData>(
     section: K,
@@ -170,6 +241,14 @@ export function FormShell() {
     setIsSubmitted(true);
   };
 
+  const handleResetForm = () => {
+    setFormData(INITIAL_FORM_DATA);
+    setFormFiles(INITIAL_FORM_FILES);
+    setCurrentStepIndex(0);
+    setIsSubmitted(false);
+    clearFormDraftFromStorage();
+  };
+
   const handleEditSection = (step: FormStepKey) => {
     const targetStepIndex = STEP_DEFINITIONS.findIndex((definition) => definition.key === step);
 
@@ -208,6 +287,12 @@ export function FormShell() {
           </li>
         ))}
       </ol>
+
+      <div className="flex justify-end">
+        <Button type="button" variant="ghost" className="h-8 px-3 text-xs text-zinc-400" onClick={handleResetForm}>
+          Réinitialiser le formulaire
+        </Button>
+      </div>
 
       {currentStep.render({
         data: formData,
