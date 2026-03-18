@@ -5,7 +5,7 @@ export default function FormulairePage() {
   return (
     <PageShell
       title="Formulaire client"
-      description="Partagez vos besoins en 7 étapes pour cadrer rapidement votre landing page."
+      description="Complétez chaque étape pour partager vos besoins et générer une page adaptée à votre activité."
     >
       <FormShell />
     </PageShell>
