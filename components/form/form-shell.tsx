@@ -6,11 +6,13 @@ import { FormProgress } from '@/components/form/form-progress';
 import { StepNavigation } from '@/components/form/step-navigation';
 import { Button } from '@/components/ui/button';
 import { FormStepDefinition, FormStepKey } from '@/lib/types/form';
+import { clientFormSchema } from '@/lib/validations/form';
 import {
   clearFormDraftFromStorage,
   readFormDraftFromStorage,
   saveFormDraftToStorage
 } from '@/lib/utils/storage';
+import { LANDING_EXPRESS_PAYMENT } from '@/lib/constants/payment';
 import { ActivityStep } from './steps/activity-step';
 import { ContactDeliveryStep } from './steps/contact-delivery-step';
 import { ContentStep } from './steps/content-step';
@@ -152,11 +154,23 @@ function mergeFormDataWithInitial(data: Partial<FormData>): FormData {
   };
 }
 
+function getFirstValidationErrorMessage(data: FormData) {
+  const validationResult = clientFormSchema.safeParse(data);
+
+  if (validationResult.success) {
+    return null;
+  }
+
+  return validationResult.error.issues[0]?.message ?? 'Veuillez compléter correctement les champs requis.';
+}
+
 export function FormShell() {
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
   const [formFiles, setFormFiles] = useState<FormFilesData>(INITIAL_FORM_FILES);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [hasHydratedFromStorage, setHasHydratedFromStorage] = useState(false);
 
   const totalSteps = STEP_DEFINITIONS.length;
@@ -212,6 +226,9 @@ export function FormShell() {
         [field]: value
       }
     }));
+
+    setCheckoutError(null);
+    setIsSubmitted(false);
   };
 
   const onFilesChange = (field: keyof FormFilesData, files: File[]) => {
@@ -222,7 +239,7 @@ export function FormShell() {
   };
 
   const handleNext = () => {
-    if (isLastStep) {
+    if (isLastStep || isCreatingCheckoutSession) {
       return;
     }
 
@@ -230,26 +247,74 @@ export function FormShell() {
   };
 
   const handlePrevious = () => {
-    if (isFirstStep) {
+    if (isFirstStep || isCreatingCheckoutSession) {
       return;
     }
 
     setCurrentStepIndex((previousIndex) => previousIndex - 1);
+    setCheckoutError(null);
   };
 
-  const handleFrontOnlySubmit = () => {
-    setIsSubmitted(true);
+  const handleStartCheckout = async () => {
+    if (isCreatingCheckoutSession) {
+      return;
+    }
+
+    const validationError = getFirstValidationErrorMessage(formData);
+
+    if (validationError) {
+      setCheckoutError(validationError);
+      return;
+    }
+
+    setCheckoutError(null);
+    setIsSubmitted(false);
+    setIsCreatingCheckoutSession(true);
+
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          customerEmail: formData.contact.email,
+          businessName: formData.identity.brandName
+        })
+      });
+
+      const payload = (await response.json()) as { error?: string; url?: string };
+
+      if (!response.ok || !payload.url) {
+        throw new Error(payload.error ?? 'Impossible de créer la session de paiement.');
+      }
+
+      window.location.assign(payload.url);
+    } catch (error) {
+      const fallbackErrorMessage = 'Le paiement n’a pas pu être lancé. Veuillez réessayer dans un instant.';
+      setCheckoutError(error instanceof Error ? error.message : fallbackErrorMessage);
+      setIsCreatingCheckoutSession(false);
+    }
   };
 
   const handleResetForm = () => {
+    if (isCreatingCheckoutSession) {
+      return;
+    }
+
     setFormData(INITIAL_FORM_DATA);
     setFormFiles(INITIAL_FORM_FILES);
     setCurrentStepIndex(0);
     setIsSubmitted(false);
+    setCheckoutError(null);
     clearFormDraftFromStorage();
   };
 
   const handleEditSection = (step: FormStepKey) => {
+    if (isCreatingCheckoutSession) {
+      return;
+    }
+
     const targetStepIndex = STEP_DEFINITIONS.findIndex((definition) => definition.key === step);
 
     if (targetStepIndex === -1 || targetStepIndex === currentStepIndex) {
@@ -258,12 +323,20 @@ export function FormShell() {
 
     setCurrentStepIndex(targetStepIndex);
     setIsSubmitted(false);
+    setCheckoutError(null);
   };
 
   const progressLabel = useMemo(
     () => `${currentStepNumber}/${totalSteps}`,
     [currentStepNumber, totalSteps]
   );
+
+  const [wasPaymentCancelled, setWasPaymentCancelled] = useState(false);
+
+  useEffect(() => {
+    const search = new URLSearchParams(window.location.search);
+    setWasPaymentCancelled(search.get('payment') === 'cancelled');
+  }, []);
 
   return (
     <Card className="space-y-6 bg-zinc-950 text-zinc-100">
@@ -289,7 +362,13 @@ export function FormShell() {
       </ol>
 
       <div className="flex justify-end">
-        <Button type="button" variant="ghost" className="h-8 px-3 text-xs text-zinc-400" onClick={handleResetForm}>
+        <Button
+          type="button"
+          variant="ghost"
+          className="h-8 px-3 text-xs text-zinc-400"
+          onClick={handleResetForm}
+          disabled={isCreatingCheckoutSession}
+        >
           Réinitialiser le formulaire
         </Button>
       </div>
@@ -302,9 +381,21 @@ export function FormShell() {
         onEditSection: handleEditSection
       })}
 
+      {wasPaymentCancelled && (
+        <p className="rounded-md border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-amber-200">
+          Paiement annulé. Vous pouvez reprendre votre formulaire et relancer le paiement quand vous êtes prêt.
+        </p>
+      )}
+
       {isSubmitted && (
         <p className="rounded-md border border-zinc-800 bg-zinc-900/60 p-3 text-sm text-zinc-100">
           Merci. Vos données ont été validées côté front uniquement.
+        </p>
+      )}
+
+      {checkoutError && (
+        <p className="rounded-md border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-200">
+          {checkoutError}
         </p>
       )}
 
@@ -312,7 +403,14 @@ export function FormShell() {
         canGoBack={!isFirstStep}
         isLastStep={isLastStep}
         onBack={handlePrevious}
-        onNext={isLastStep ? handleFrontOnlySubmit : handleNext}
+        onNext={isLastStep ? handleStartCheckout : handleNext}
+        isLoading={isCreatingCheckoutSession}
+        nextLabel={
+          isLastStep
+            ? `Payer ${LANDING_EXPRESS_PAYMENT.amountInCents / 100} €`
+            : undefined
+        }
+        loadingLabel="Redirection vers le paiement..."
       />
     </Card>
   );
