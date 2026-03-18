@@ -5,15 +5,24 @@ import { Button } from '@/components/ui/button';
 export default function SuccesPage() {
   return (
     <PageShell
-      title="Commande confirmée"
-      description="Votre demande a bien été prise en compte. Merci pour votre confiance."
+      title="Paiement confirmé"
+      description="Merci pour votre commande Landing Express 10€."
     >
-      <Card className="space-y-4">
-        <p className="text-sm text-muted">
-          Cette page de confirmation sera reliée au flux de paiement lors de l’intégration Stripe. Vous recevrez les
-          prochaines instructions pour transmettre vos informations.
+      <Card className="space-y-4 bg-zinc-950 text-zinc-100">
+        <p className="text-sm text-zinc-300">
+          Votre paiement a été validé avec succès. Nous lançons maintenant la préparation de votre landing page 1
+          page.
         </p>
-        <Button href="/formulaire">Accéder au formulaire</Button>
+        <p className="text-sm text-zinc-300">
+          Livraison prévue sous 24h avec hébergement inclus. Si nous avons besoin d’une précision, nous vous
+          recontacterons rapidement.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <Button href="/">Retour à l’accueil</Button>
+          <Button href="/formulaire" variant="ghost">
+            Revenir au formulaire
+          </Button>
+        </div>
       </Card>
     </PageShell>
   );
