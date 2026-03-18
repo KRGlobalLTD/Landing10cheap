@@ -26,3 +26,18 @@ export type InternalOrderEmailPayload = {
     pdfUrl: string;
   };
 };
+
+export type CustomerOrderConfirmationEmailPayload = {
+  brief: BriefRecord;
+  order: OrderRecord;
+  confirmedAt: string;
+  customerEmail: string;
+  support: {
+    email?: string;
+    whatsapp?: string;
+  };
+  links: {
+    homeUrl: string;
+    supportUrl: string;
+  };
+};
