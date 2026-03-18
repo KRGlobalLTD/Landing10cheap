@@ -92,8 +92,35 @@ export async function markInternalOrderEmailSent(params: { stripeSessionId: stri
   return updatedOrder;
 }
 
+export async function markCustomerOrderConfirmationEmailSent(params: { stripeSessionId: string; messageId: string }) {
+  const { stripeSessionId, messageId } = params;
+  const orders = await readOrders();
+  const orderIndex = orders.findIndex((order) => order.stripeSessionId === stripeSessionId);
+
+  if (orderIndex < 0) {
+    return null;
+  }
+
+  const updatedOrder: OrderRecord = {
+    ...orders[orderIndex],
+    notifications: {
+      ...(orders[orderIndex].notifications ?? {}),
+      customerOrderConfirmationEmail: {
+        sentAt: new Date().toISOString(),
+        messageId
+      }
+    }
+  };
+
+  orders[orderIndex] = updatedOrder;
+  await writeOrders(orders);
+
+  return updatedOrder;
+}
+
 export const ordersRepository = {
   getOrderByStripeSessionId,
   saveOrder,
-  markInternalOrderEmailSent
+  markInternalOrderEmailSent,
+  markCustomerOrderConfirmationEmailSent
 };

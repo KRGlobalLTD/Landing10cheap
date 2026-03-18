@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { markBriefAsPaid, updateBrief, getBriefByStripeSessionId } from '@/lib/briefs';
 import { sendInternalOrderEmail } from '@/lib/email/send-internal-order-email';
+import { sendCustomerOrderConfirmationEmail } from '@/lib/email/send-customer-order-confirmation';
 import { PAYMENT_METADATA } from '@/lib/constants/payment';
 import { ordersRepository } from '@/lib/orders';
 import { getStripeServerClient, getStripeWebhookSecret } from '@/lib/stripe';
@@ -131,6 +132,32 @@ async function maybeSendInternalOrderEmail(params: { order: OrderRecord; brief: 
   }
 }
 
+async function maybeSendCustomerOrderConfirmationEmail(params: { order: OrderRecord; brief: BriefRecord | null }) {
+  const { order, brief } = params;
+
+  if (!brief || order.status !== 'paid') {
+    return;
+  }
+
+  if (order.notifications?.customerOrderConfirmationEmail?.sentAt) {
+    console.info(`[email] Customer confirmation email already sent for session ${order.stripeSessionId}.`);
+    return;
+  }
+
+  try {
+    const result = await sendCustomerOrderConfirmationEmail({ brief, order });
+
+    await ordersRepository.markCustomerOrderConfirmationEmailSent({
+      stripeSessionId: order.stripeSessionId,
+      messageId: result.messageId
+    });
+
+    console.info(`[email] Customer confirmation email sent for session ${order.stripeSessionId}.`);
+  } catch (error) {
+    console.error(`[email] Failed to send customer confirmation email for session ${order.stripeSessionId}.`, error);
+  }
+}
+
 async function handleCheckoutSessionEvent(session: Stripe.Checkout.Session, status: CreateOrderInput['status']) {
   const { created, order } = await ordersRepository.saveOrder(toOrderFromCheckoutSession(session, status));
 
@@ -143,6 +170,11 @@ async function handleCheckoutSessionEvent(session: Stripe.Checkout.Session, stat
   const syncedBrief = await syncBriefFromCheckoutSession(session, status);
 
   await maybeSendInternalOrderEmail({
+    order,
+    brief: syncedBrief
+  });
+
+  await maybeSendCustomerOrderConfirmationEmail({
     order,
     brief: syncedBrief
   });

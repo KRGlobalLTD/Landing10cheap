@@ -9,6 +9,10 @@ export type OrderNotifications = {
     sentAt: string;
     messageId: string;
   };
+  customerOrderConfirmationEmail?: {
+    sentAt: string;
+    messageId: string;
+  };
 };
 
 export type OrderRecord = {
