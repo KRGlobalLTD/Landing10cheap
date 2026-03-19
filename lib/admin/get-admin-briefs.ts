@@ -15,6 +15,7 @@ export type AdminBriefRow = {
   briefUrl: string;
   promptUrl: string;
   pdfUrl: string;
+  internalNotes: string;
 };
 
 function mapOrderStatusToPaymentStatus(status: string): BriefPaymentStatus {
@@ -57,7 +58,8 @@ export async function getAdminBriefs(): Promise<AdminBriefRow[]> {
         currency,
         briefUrl: `/briefs/${brief.id}`,
         promptUrl: `/briefs/${brief.id}/prompt`,
-        pdfUrl: `/api/briefs/${brief.id}/pdf`
+        pdfUrl: `/api/briefs/${brief.id}/pdf`,
+        internalNotes: brief.internalNotes ?? ''
       } satisfies AdminBriefRow;
     })
   );
