@@ -1,8 +1,8 @@
 import { BRIEF_PAYMENT_DEFAULT_CURRENCY } from '@/lib/constants/brief';
-import { createLocalBriefStore } from '@/lib/storage/brief-store';
+import { createSupabaseBriefStore } from '@/lib/storage/supabase-brief-store';
 import type { BriefPaymentStatus, BriefRecord, BriefStatus, CreateBriefInput, UpdateBriefInput } from '@/lib/types/brief';
 
-const briefStore = createLocalBriefStore();
+const briefStore = createSupabaseBriefStore();
 
 export async function createBrief(input: CreateBriefInput) {
   return briefStore.createBrief(input);
