@@ -1,6 +1,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { withDefaultBriefDelivery } from '@/lib/types/delivery';
 import type { BriefRecord, CreateBriefInput, UpdateBriefInput } from '@/lib/types/brief';
 
 const BRIEFS_FILE_PATH = path.join(process.cwd(), 'data', 'briefs.json');
@@ -22,6 +23,13 @@ async function ensureBriefsFileExists() {
   }
 }
 
+function normalizeBrief(brief: BriefRecord): BriefRecord {
+  return {
+    ...brief,
+    delivery: withDefaultBriefDelivery(brief.delivery)
+  };
+}
+
 async function readBriefs(): Promise<BriefRecord[]> {
   await ensureBriefsFileExists();
 
@@ -29,7 +37,7 @@ async function readBriefs(): Promise<BriefRecord[]> {
 
   try {
     const parsed = JSON.parse(fileContent);
-    return Array.isArray(parsed) ? (parsed as BriefRecord[]) : [];
+    return Array.isArray(parsed) ? (parsed as BriefRecord[]).map(normalizeBrief) : [];
   } catch {
     console.warn('[brief-store] Invalid JSON in data/briefs.json, resetting in-memory read to empty array.');
     return [];
@@ -52,6 +60,7 @@ function mergeBrief(existingBrief: BriefRecord, updates: UpdateBriefInput): Brie
     contact: updates.contact ? { ...existingBrief.contact, ...updates.contact } : existingBrief.contact,
     assets: updates.assets ? { ...existingBrief.assets, ...updates.assets } : existingBrief.assets,
     payment: updates.payment ? { ...existingBrief.payment, ...updates.payment } : existingBrief.payment,
+    delivery: updates.delivery ? withDefaultBriefDelivery({ ...existingBrief.delivery, ...updates.delivery }) : existingBrief.delivery,
     updatedAt: new Date().toISOString()
   };
 }
@@ -66,7 +75,8 @@ export function createLocalBriefStore(): BriefStore {
         id: randomUUID(),
         createdAt: now,
         updatedAt: now,
-        ...input
+        ...input,
+        delivery: withDefaultBriefDelivery(input.delivery)
       };
 
       briefs.push(brief);

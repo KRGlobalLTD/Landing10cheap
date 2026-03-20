@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BriefDeliveryForm } from '@/components/admin/brief-delivery-form';
 import { BriefNotes } from '@/components/admin/brief-notes';
 import { Card } from '@/components/ui/card';
 import { StatusBadge } from '@/components/admin/status-badge';
@@ -60,6 +61,15 @@ function QuickLinks({ row }: { row: AdminBriefRow }) {
   );
 }
 
+function BriefAdminEditors({ row }: { row: AdminBriefRow }) {
+  return (
+    <div className="space-y-3">
+      <BriefDeliveryForm briefId={row.briefId} initialDelivery={row.delivery} />
+      <BriefNotes briefId={row.briefId} initialNotes={row.internalNotes} />
+    </div>
+  );
+}
+
 export function BriefsTable({ briefs }: BriefsTableProps) {
   if (briefs.length === 0) {
     return (
@@ -74,7 +84,7 @@ export function BriefsTable({ briefs }: BriefsTableProps) {
     <>
       <div className="hidden overflow-hidden rounded-xl border border-border bg-card md:block">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1240px] text-left text-sm">
+          <table className="w-full min-w-[1400px] text-left text-sm">
             <thead className="bg-zinc-900/80 text-xs uppercase tracking-wide text-zinc-400">
               <tr>
                 <th className="px-4 py-3 font-medium">Brief</th>
@@ -85,7 +95,7 @@ export function BriefsTable({ briefs }: BriefsTableProps) {
                 <th className="px-4 py-3 font-medium">Paiement</th>
                 <th className="px-4 py-3 font-medium">Montant</th>
                 <th className="px-4 py-3 font-medium">Liens</th>
-                <th className="px-4 py-3 font-medium">Notes internes</th>
+                <th className="px-4 py-3 font-medium">Livraison & notes</th>
               </tr>
             </thead>
             <tbody>
@@ -108,8 +118,8 @@ export function BriefsTable({ briefs }: BriefsTableProps) {
                   <td className="px-4 py-3">
                     <QuickLinks row={row} />
                   </td>
-                  <td className="min-w-[320px] px-4 py-3">
-                    <BriefNotes briefId={row.briefId} initialNotes={row.internalNotes} />
+                  <td className="min-w-[390px] px-4 py-3">
+                    <BriefAdminEditors row={row} />
                   </td>
                 </tr>
               ))}
@@ -151,8 +161,7 @@ export function BriefsTable({ briefs }: BriefsTableProps) {
             </div>
 
             <QuickLinks row={row} />
-
-            <BriefNotes briefId={row.briefId} initialNotes={row.internalNotes} />
+            <BriefAdminEditors row={row} />
           </Card>
         ))}
       </div>
