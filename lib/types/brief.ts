@@ -1,3 +1,5 @@
+import { EMPTY_BRIEF_DELIVERY, type BriefDelivery } from '@/lib/types/delivery';
+
 export type BriefStatus =
   | 'draft'
   | 'pending_payment'
@@ -69,9 +71,14 @@ export type BriefRecord = {
     currency: string | null;
     paidAt: string | null;
   };
+  delivery: BriefDelivery;
   internalNotes?: string;
 };
 
+export const DEFAULT_BRIEF_DELIVERY = EMPTY_BRIEF_DELIVERY;
+
 export type CreateBriefInput = Omit<BriefRecord, 'id' | 'createdAt' | 'updatedAt'>;
 
-export type UpdateBriefInput = Partial<Omit<BriefRecord, 'id' | 'createdAt'>>;
+export type UpdateBriefInput = Partial<Omit<BriefRecord, 'id' | 'createdAt' | 'delivery'>> & {
+  delivery?: Partial<BriefDelivery>;
+};

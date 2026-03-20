@@ -1,5 +1,6 @@
 import { BRIEF_DEFAULT_STATUS, BRIEF_SOURCE } from '@/lib/constants/brief';
 import type { CreateBriefInput } from '@/lib/types/brief';
+import { EMPTY_BRIEF_DELIVERY } from '@/lib/types/delivery';
 import type { ClientFormData } from '@/lib/types/form';
 
 export type BriefCreationPayload = {
@@ -83,6 +84,7 @@ export function mapFormToBrief(payload: BriefCreationPayload): CreateBriefInput 
       amountTotal: null,
       currency: null,
       paidAt: null
-    }
+    },
+    delivery: EMPTY_BRIEF_DELIVERY
   };
 }

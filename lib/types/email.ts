@@ -1,4 +1,5 @@
 import type { BriefRecord } from '@/lib/types/brief';
+import type { BriefDelivery } from '@/lib/types/delivery';
 import type { OrderRecord } from '@/lib/types/order';
 
 export type EmailProvider = 'resend';
@@ -39,5 +40,16 @@ export type CustomerOrderConfirmationEmailPayload = {
   links: {
     homeUrl: string;
     supportUrl: string;
+  };
+};
+
+export type CustomerDeliveryEmailPayload = {
+  brief: BriefRecord;
+  delivery: BriefDelivery;
+  customerEmail: string;
+  deliveredAt: string;
+  support: {
+    email?: string;
+    whatsapp?: string;
   };
 };

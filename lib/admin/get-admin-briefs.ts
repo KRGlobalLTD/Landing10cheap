@@ -1,4 +1,5 @@
 import { getAllBriefs } from '@/lib/briefs';
+import { withDefaultBriefDelivery, type BriefDelivery } from '@/lib/types/delivery';
 import { getOrderByStripeSessionId } from '@/lib/orders';
 import type { BriefPaymentStatus, BriefStatus } from '@/lib/types/brief';
 
@@ -16,6 +17,7 @@ export type AdminBriefRow = {
   promptUrl: string;
   pdfUrl: string;
   internalNotes: string;
+  delivery: BriefDelivery;
 };
 
 function mapOrderStatusToPaymentStatus(status: string): BriefPaymentStatus {
@@ -59,7 +61,8 @@ export async function getAdminBriefs(): Promise<AdminBriefRow[]> {
         briefUrl: `/briefs/${brief.id}`,
         promptUrl: `/briefs/${brief.id}/prompt`,
         pdfUrl: `/api/briefs/${brief.id}/pdf`,
-        internalNotes: brief.internalNotes ?? ''
+        internalNotes: brief.internalNotes ?? '',
+        delivery: withDefaultBriefDelivery(brief.delivery)
       } satisfies AdminBriefRow;
     })
   );
