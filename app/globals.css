@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  a {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+}
+
+@keyframes accordion-down {
+  from { height: 0 }
+  to { height: var(--radix-accordion-content-height) }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height) }
+  to { height: 0 }
+}
+
+.animate-accordion-down { animation: accordion-down 0.2s ease-out }
+.animate-accordion-up { animation: accordion-up 0.2s ease-out }
+
+/* Désactive les animations scroll sur mobile */
+@media (max-width: 1023px) {
+  [data-scroll-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Form input focus styles */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #AAFF00;
+  outline-offset: 2px;
+  border-color: transparent;
+}

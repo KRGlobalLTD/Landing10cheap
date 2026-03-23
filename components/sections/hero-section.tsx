@@ -1,0 +1,204 @@
+'use client';
+
+import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
+
+const METIERS = [
+  "Plombier",
+  "Fleuriste",
+  "Barber",
+  "Électricien",
+  "Photographe",
+  "Coach sportif",
+  "Coiffeur",
+  "Paysagiste",
+  "Restaurateur",
+  "Dentiste",
+];
+
+type Phase = "idle" | "leaving" | "fading";
+
+export function HeroSection() {
+  const router = useRouter();
+  const [phase, setPhase] = useState<Phase>("idle");
+  const [metier, setMetier] = useState("");
+  const [ville, setVille] = useState("");
+  const metierRef = useRef<HTMLInputElement>(null);
+  const [animatedPlaceholder, setAnimatedPlaceholder] = useState("");
+  const [metierFocused, setMetierFocused] = useState(false);
+
+  useEffect(() => {
+    if (metier !== "" || metierFocused) return;
+
+    let cancelled = false;
+    let metierIdx = 0;
+    let charIdx = 0;
+    let deleting = false;
+    let timer: ReturnType<typeof setTimeout>;
+
+    function tick() {
+      if (cancelled) return;
+      const current = METIERS[metierIdx];
+
+      if (!deleting) {
+        charIdx++;
+        setAnimatedPlaceholder(current.slice(0, charIdx));
+        if (charIdx === current.length) {
+          deleting = true;
+          timer = setTimeout(tick, 1600);
+        } else {
+          timer = setTimeout(tick, 60);
+        }
+      } else {
+        charIdx--;
+        setAnimatedPlaceholder(current.slice(0, charIdx));
+        if (charIdx === 0) {
+          deleting = false;
+          metierIdx = (metierIdx + 1) % METIERS.length;
+          timer = setTimeout(tick, 300);
+        } else {
+          timer = setTimeout(tick, 35);
+        }
+      }
+    }
+
+    timer = setTimeout(tick, 800);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [metier, metierFocused]);
+
+  function handleSubmit(e?: React.FormEvent) {
+    e?.preventDefault();
+    if (typeof window !== "undefined") {
+      localStorage.setItem("prefill_metier", metier);
+      localStorage.setItem("prefill_ville", ville);
+    }
+    setPhase("leaving");
+    setTimeout(() => setPhase("fading"), 480);
+    setTimeout(() => router.push("/formulaire"), 780);
+  }
+
+  return (
+    <div className="relative w-full bg-zinc-950 text-white overflow-hidden font-sans">
+      <style>{`
+        @keyframes cursor-blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+        .hero-cursor { animation: cursor-blink 0.9s step-end infinite; }
+      `}</style>
+
+      {/* Glow */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{ backgroundImage: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(170,255,0,0.08) 0%, transparent 60%)" }}
+      />
+
+      <div className="relative z-10 flex flex-col items-center text-center px-4 sm:px-6"
+        style={{ paddingTop: 140, paddingBottom: 100 }}
+      >
+
+        {/* 2. Titre */}
+        <h1 className="font-bold tracking-tighter leading-none mb-6" style={{ fontSize: 72 }}>
+          <span className="text-white block">Votre site web</span>
+          <span className="block" style={{ color: "#AAFF00" }}>en 30 secondes.</span>
+        </h1>
+
+        {/* 3. Sous-titre */}
+        <p className="mb-40 leading-relaxed" style={{ color: "#a0a0a0", fontSize: 18, maxWidth: 560 }}>
+          Décrivez votre activité, notre IA génère automatiquement votre site.
+          Responsive, hébergé, en ligne immédiatement.
+        </p>
+
+        {/* 4. Barre de saisie */}
+        <form
+          onSubmit={handleSubmit}
+          className="w-full flex items-center"
+          style={{
+            maxWidth: 600,
+            backgroundColor: "#1a1a1a",
+            border: "1px solid #2a2a2a",
+            borderRadius: 50,
+            padding: "6px 6px 6px 20px",
+            gap: 0,
+            height: 58,
+          }}
+        >
+          {/* Métier field */}
+          <div className="flex items-center gap-2 flex-1 min-w-0" style={{ overflow: "hidden" }}>
+            <span className="text-sm shrink-0 select-none" style={{ color: "#6b7280" }}>Je suis</span>
+            <div className="relative flex-1 min-w-0 flex items-center" style={{ height: 24 }}>
+              {/* Actual input (invisible text when empty, white when typing) */}
+              <input
+                ref={metierRef}
+                type="text"
+                value={metier}
+                onChange={e => setMetier(e.target.value)}
+                onFocus={() => setMetierFocused(true)}
+                onBlur={() => setMetierFocused(false)}
+                className="absolute inset-0 w-full bg-transparent border-none text-sm font-semibold"
+                style={{
+                  outline: "none",
+                  caretColor: (metier === "" && !metierFocused) ? "transparent" : "#AAFF00",
+                  color: (metier === "" && !metierFocused) ? "transparent" : "white",
+                }}
+              />
+              {/* Animated overlay (shown only when empty and not focused) */}
+              {metier === "" && !metierFocused && (
+                <span className="flex items-center text-sm font-semibold pointer-events-none select-none whitespace-nowrap overflow-hidden" style={{ color: "#AAFF00", maxWidth: "100%" }}>
+                  {animatedPlaceholder || <span style={{ color: "#4b5563" }}>métier...</span>}
+                  {animatedPlaceholder && (
+                    <span className="hero-cursor inline-block w-[2px] h-3.5 ml-0.5 rounded-sm" style={{ backgroundColor: "#AAFF00", flexShrink: 0 }} />
+                  )}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div style={{ width: 1, alignSelf: "stretch", backgroundColor: "#2a2a2a", flexShrink: 0, margin: "10px 0" }} />
+
+          {/* Ville field */}
+          <div className="flex items-center gap-2 flex-1 min-w-0 px-4">
+            <span className="text-sm shrink-0 select-none" style={{ color: "#6b7280" }}>à</span>
+            <input
+              type="text"
+              value={ville}
+              onChange={e => setVille(e.target.value)}
+              placeholder="votre ville..."
+              className="flex-1 bg-transparent border-none text-white text-sm min-w-0"
+              style={{ color: "white", caretColor: "#AAFF00", outline: "none" }}
+            />
+          </div>
+
+          {/* Button */}
+          <button
+            type="submit"
+            className="inline-flex items-center gap-1.5 font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all flex-shrink-0"
+            style={{ backgroundColor: "#AAFF00", borderRadius: 50, padding: "12px 22px" }}
+          >
+            Créer mon site
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </form>
+
+
+        {/* 6. Badges de réassurance */}
+        <div className="flex flex-wrap items-center justify-center mt-6" style={{ gap: 32 }}>
+          {["Responsive", "Hébergé inclus", "En ligne immédiatement"].map(text => (
+            <span key={text} className="flex items-center gap-1.5 text-sm" style={{ color: "#6b7280" }}>
+              <span style={{ color: "#AAFF00" }}>✓</span>
+              {text}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Fade overlay */}
+      <div
+        className="absolute inset-0 z-30 bg-zinc-950 pointer-events-none transition-opacity duration-300"
+        style={{ opacity: phase === "fading" ? 1 : 0 }}
+      />
+    </div>
+  );
+}

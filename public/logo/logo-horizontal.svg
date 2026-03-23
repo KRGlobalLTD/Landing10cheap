@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" width="200" height="50">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;display=swap');
+    </style>
+  </defs>
+  <text
+    x="100"
+    y="25"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-family="Inter, system-ui, -apple-system, sans-serif"
+    font-weight="700"
+    font-size="32"
+    letter-spacing="-0.02em"
+  >
+    <tspan fill="#ffffff">sit</tspan><tspan fill="#AAFF00">easy</tspan>
+  </text>
+</svg>

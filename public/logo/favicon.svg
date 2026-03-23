@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;display=swap');
+    </style>
+  </defs>
+  <rect x="0" y="0" width="64" height="64" rx="12" fill="#0a0a0a"/>
+  <text
+    x="32"
+    y="32"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-family="Inter, system-ui, -apple-system, sans-serif"
+    font-weight="700"
+    font-size="32"
+    letter-spacing="-0.02em"
+  >
+    <tspan fill="#ffffff">S</tspan><tspan fill="#AAFF00">e</tspan>
+  </text>
+</svg>
