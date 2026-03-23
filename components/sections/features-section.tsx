@@ -86,7 +86,6 @@ function SeoCard() {
   const bullets = ['SSR / rendu serveur', 'Schema.org LocalBusiness', 'Sitemap automatique', 'Meta tags optimisés'];
   return (
     <Card style={{ height: 260, padding: 0, overflow: 'hidden' }}>
-      {/* Zone visuelle haut */}
       <div style={{ backgroundColor: '#0d0d0d', paddingTop: 20, paddingLeft: 20, paddingRight: 20, paddingBottom: 8, height: 110, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 7 }}>
         {bullets.map(b => (
           <div key={b} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -95,7 +94,6 @@ function SeoCard() {
           </div>
         ))}
       </div>
-      {/* Texte bas */}
       <div style={{ padding: '20px 20px 20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
         <Badge label="SEO" />
         <h3 style={{ fontSize: 15, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>Optimisé pour Google</h3>
@@ -107,7 +105,7 @@ function SeoCard() {
   );
 }
 
-function DesignCard(_props: { started: boolean }) {
+function DesignCard() {
   const colors = ['#c9a96e', '#2d6a4f', '#1d3557', '#e63946', '#9b5de5'];
   const [visible, setVisible] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -132,7 +130,6 @@ function DesignCard(_props: { started: boolean }) {
 
   return (
     <Card style={{ height: 260, padding: 0, overflow: 'hidden' }} ref={cardRef}>
-      {/* Zone visuelle haut */}
       <div style={{ backgroundColor: '#0d0d0d', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', flex: 1 }}>
         <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
           {colors.map((c, i) => (
@@ -149,7 +146,6 @@ function DesignCard(_props: { started: boolean }) {
         </div>
         <span style={{ fontSize: 10, color: '#6b7280' }}>Palette personnalisée</span>
       </div>
-      {/* Texte bas */}
       <div style={{ padding: '20px' }}>
         <Badge label="Design" />
         <h3 style={{ fontSize: 15, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>Un design fait pour vous.</h3>
@@ -180,19 +176,15 @@ function HostingCard() {
 
   return (
     <Card style={{ height: 260, padding: 0, overflow: 'hidden' }}>
-      {/* Zone visuelle haut — mockup navigateur */}
       <div style={{ backgroundColor: '#0d0d0d', paddingTop: 16, paddingLeft: 16, paddingRight: 16, paddingBottom: 0, height: 110, display: 'flex', alignItems: 'flex-start' }}>
         <div style={{ borderRadius: 8, border: '1px solid #2a2a2a', overflow: 'hidden', width: '100%' }}>
           <div style={{ backgroundColor: '#1a1a1a', height: 32, display: 'flex', alignItems: 'center', padding: '0 8px', gap: 6 }}>
-            {/* Boutons macOS */}
             <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
               {['#ef4444', '#eab308', '#22c55e'].map(c => (
                 <div key={c} style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: c, opacity: 0.8 }} />
               ))}
             </div>
-            {/* Barre d'adresse */}
             <div style={{ flex: 1, backgroundColor: '#111111', borderRadius: 4, border: '1px solid #2a2a2a', height: 20, display: 'flex', alignItems: 'center', padding: '0 8px', gap: 4, overflow: 'hidden' }}>
-              {/* Icône cadenas */}
               <svg width="8" height="9" viewBox="0 0 8 9" fill="none" style={{ flexShrink: 0 }}>
                 <rect x="1" y="4" width="6" height="5" rx="1" fill="#4b5563" />
                 <path d="M2.5 4V2.5a1.5 1.5 0 013 0V4" stroke="#4b5563" strokeWidth="1" fill="none" />
@@ -223,7 +215,6 @@ function HostingCard() {
           </div>
         </div>
       </div>
-      {/* Texte bas */}
       <div style={{ padding: '48px 20px 20px' }}>
         <Badge label="Hébergement" />
         <h3 style={{ fontSize: 15, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>En ligne en un clic</h3>
@@ -253,7 +244,6 @@ export function FeaturesSection() {
   return (
     <section id="features" className="border-y border-white/5 py-24">
       <div ref={ref} className="px-4 md:px-[40px]" style={{ maxWidth: 900, margin: '0 auto' }}>
-        {/* Header */}
         <div className="mx-auto max-w-2xl text-center mb-14">
           <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
             Un site complet,{' '}
@@ -264,25 +254,21 @@ export function FeaturesSection() {
           </p>
         </div>
 
-        {/* Bento — desktop */}
         <div className="hidden lg:flex lg:flex-col" style={{ gap: 16 }}>
-          {/* Row 1 — 58 / 42 */}
           <div style={{ display: 'grid', gridTemplateColumns: '58fr 42fr', gap: 16 }}>
             <PerformancesCard started={started} />
             <SeoCard />
           </div>
-          {/* Row 2 — 42 / 58 */}
           <div style={{ display: 'grid', gridTemplateColumns: '42fr 58fr', gap: 16 }}>
-            <DesignCard started={started} />
+            <DesignCard />
             <HostingCard />
           </div>
         </div>
 
-        {/* Mobile — stacked */}
         <div className="flex flex-col gap-4 lg:hidden">
           <PerformancesCard started={started} />
           <SeoCard />
-          <DesignCard started={started} />
+          <DesignCard />
           <HostingCard />
         </div>
       </div>
