@@ -385,7 +385,7 @@ export function FormShell() {
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl"
             style={{ backgroundColor: 'rgba(170,255,0,0.12)' }}
           >
-            <StepIcon className="h-5 w-5" style={{ color: '#AAFF00' }} />
+            <StepIcon className="h-5 w-5 text-[#AAFF00]" />
           </div>
           <div className="space-y-1 pt-0.5">
             <h2 className="text-lg font-semibold leading-tight text-zinc-100">{currentStep.title}</h2>
