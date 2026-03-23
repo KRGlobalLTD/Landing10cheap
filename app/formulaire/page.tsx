@@ -75,13 +75,15 @@ export default function FormulairePage() {
     setIsLoading(true);
     setSubmitError(null);
     try {
+      const checkoutPayload = {
+        customerEmail: data.email,
+        businessName: data.nomEntreprise || data.typeProjet || undefined,
+      };
+      console.log('PAYLOAD ENVOYÉ:', JSON.stringify(checkoutPayload, null, 2));
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerEmail: data.email,
-          businessName: data.nomEntreprise || data.typeProjet || undefined,
-        }),
+        body: JSON.stringify(checkoutPayload),
       });
       const payload = (await response.json()) as { error?: string; url?: string };
       if (!response.ok || !payload.url) {
