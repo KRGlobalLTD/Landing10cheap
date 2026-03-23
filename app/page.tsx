@@ -39,10 +39,10 @@ export default function HomePage() {
           <HowItWorksSection />
         </ScrollReveal>
         <ScrollReveal delay={0.05}>
-          <GallerySection />
+          <FeaturesSection />
         </ScrollReveal>
         <ScrollReveal delay={0.05}>
-          <FeaturesSection />
+          <GallerySection />
         </ScrollReveal>
         <ScrollReveal delay={0.05}>
           <TestimonialsSection />

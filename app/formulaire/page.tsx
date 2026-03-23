@@ -3,17 +3,19 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Stepper } from '@/components/formulaire/Stepper';
 import { EtapeProfil } from '@/components/formulaire/EtapeProfil';
 import { Etape2 } from '@/components/formulaire/Etape2';
 import { Etape3 } from '@/components/formulaire/Etape3';
 import { FormulaireData, INITIAL_FORM_DATA } from '@/types/formulaire';
 import { saveFormToStorage, loadFormFromStorage } from '@/hooks/useFormPersist';
-import Link from 'next/link';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function FormulairePage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [data, setData] = useState<FormulaireData>(INITIAL_FORM_DATA);
@@ -24,10 +26,8 @@ export default function FormulairePage() {
 
   useEffect(() => {
     const saved = loadFormFromStorage();
-    const prefillMetier = localStorage.getItem('prefill_metier') || '';
-    const prefillVille = localStorage.getItem('prefill_ville') || '';
-    localStorage.removeItem('prefill_metier');
-    localStorage.removeItem('prefill_ville');
+    const prefillMetier = searchParams.get('metier') || '';
+    const prefillVille = searchParams.get('ville') || '';
 
     setData((prev) => {
       const next = { ...prev, ...(saved ?? {}) };
@@ -35,7 +35,7 @@ export default function FormulairePage() {
       if (prefillMetier) { next.metier = prefillMetier; next.typeClient = 'professionnel'; }
       return next;
     });
-  }, []);
+  }, [searchParams]);
 
   function onChange<K extends keyof FormulaireData>(key: K, value: FormulaireData[K]) {
     setData((prev) => {
@@ -131,13 +131,13 @@ export default function FormulairePage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <Link
-        href="/"
+      <button
+        onClick={() => router.back()}
         className="fixed left-6 top-6 z-50 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm text-zinc-400 backdrop-blur-sm transition-all hover:border-white/25 hover:text-white"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
-        Accueil
-      </Link>
+        Retour
+      </button>
       <div className="mx-auto max-w-xl px-4 py-12">
 
         <div className="mb-10 text-center">

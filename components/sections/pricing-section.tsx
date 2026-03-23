@@ -39,9 +39,9 @@ export function PricingSection() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-2 lg:items-stretch">
+        <div className="mt-14 grid gap-6 lg:grid-cols-2 lg:items-stretch mx-auto max-w-4xl">
           {/* Pricing card */}
-          <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.03] p-8 flex flex-col">
+          <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.03] p-6 flex flex-col">
             {/* Glow */}
             <div
               className="pointer-events-none absolute inset-0"
@@ -52,21 +52,21 @@ export function PricingSection() {
             />
 
             <div className="relative">
-              <div className="mb-6">
+              <div className="mb-4">
                 <span className="rounded-full border px-3 py-1 text-xs font-medium" style={{ borderColor: '#AAFF0040', backgroundColor: '#AAFF0010', color: '#AAFF00' }}>
                   Paiement unique
                 </span>
               </div>
 
-              <div className="mb-2 flex items-end gap-2">
-                <span className="text-6xl font-bold tracking-tight text-foreground">14,99€</span>
-                <span className="mb-2 text-sm text-muted">TTC · une seule fois</span>
+              <div className="mb-1 flex items-end gap-2">
+                <span className="text-5xl font-bold tracking-tight text-foreground">14,99€</span>
+                <span className="mb-1.5 text-sm text-muted">TTC · une seule fois</span>
               </div>
-              <p className="mb-8 text-sm text-muted">
+              <p className="mb-6 text-sm text-muted">
                 Aucun abonnement. Aucune surprise. Votre site reste en ligne.
               </p>
 
-              <ul className="mb-8 space-y-3">
+              <ul className="mb-6 space-y-2.5">
                 {INCLUDED.map((item) => (
                   <li key={item} className="flex items-start gap-3 text-sm text-muted">
                     <span className="mt-0.5 shrink-0" style={{ color: '#AAFF00' }}>✓</span>
@@ -75,18 +75,18 @@ export function PricingSection() {
                 ))}
               </ul>
 
-              <Button href="/formulaire" className="w-full h-12 rounded-xl text-sm font-semibold">
+              <Button href="/formulaire" className="w-full h-10 rounded-xl text-sm font-semibold">
                 Créer mon site maintenant
               </Button>
 
-              <p className="mt-4 text-center text-xs text-muted/50">
+              <p className="mt-3 text-center text-xs text-muted/50">
                 Remboursé si non satisfait sous 7 jours
               </p>
             </div>
           </div>
 
           {/* Comparison table */}
-          <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.03] p-8 flex flex-col space-y-4">
+          <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.03] p-6 flex flex-col space-y-3">
             <h3 className="text-base font-semibold text-foreground">
               Pourquoi pas une agence ?
             </h3>
@@ -96,7 +96,7 @@ export function PricingSection() {
 
             <div className="overflow-hidden rounded-xl border border-white/8">
               {/* Header */}
-              <div className="grid grid-cols-3 border-b border-white/8 bg-white/[0.02] px-4 py-3">
+              <div className="grid grid-cols-3 border-b border-white/8 bg-white/[0.02] px-4 py-2.5">
                 <span className="text-xs font-medium text-muted" />
                 <span className="text-center text-xs font-semibold text-foreground">Avec Siteasy</span>
                 <span className="text-center text-xs text-muted">Agence classique</span>
@@ -105,16 +105,16 @@ export function PricingSection() {
               {COMPARISON.map((row, i) => (
                 <div
                   key={row.item}
-                  className={`grid grid-cols-3 px-4 py-3 ${
+                  className={`grid grid-cols-3 px-4 py-2.5 ${
                     i < COMPARISON.length - 1 ? 'border-b border-white/5' : ''
                   }`}
                 >
-                  <span className="text-sm text-muted">{row.item}</span>
-                  <span className="text-center text-sm font-medium text-accent">
+                  <span className="text-xs text-muted">{row.item}</span>
+                  <span className="text-center text-xs font-medium text-accent">
                     {row.us ? '✓' : '✗'}
                   </span>
                   <span
-                    className={`text-center text-sm ${row.agency ? 'text-accent font-medium' : 'text-muted/40'}`}
+                    className={`text-center text-xs ${row.agency ? 'text-accent font-medium' : 'text-muted/40'}`}
                   >
                     {row.agency ? '✓' : '✗'}
                   </span>
@@ -122,10 +122,10 @@ export function PricingSection() {
               ))}
 
               {/* Price row */}
-              <div className="grid grid-cols-3 border-t border-white/8 bg-white/[0.02] px-4 py-3">
-                <span className="text-sm font-medium text-foreground">Prix</span>
-                <span className="text-center text-sm font-bold text-foreground">14,99€</span>
-                <span className="text-center text-sm text-muted">1 500€ – 8 000€</span>
+              <div className="grid grid-cols-3 border-t border-white/8 bg-white/[0.02] px-4 py-2.5">
+                <span className="text-xs font-medium text-foreground">Prix</span>
+                <span className="text-center text-xs font-bold text-foreground">14,99€</span>
+                <span className="text-center text-xs text-muted">1 500€ – 8 000€</span>
               </div>
             </div>
           </div>

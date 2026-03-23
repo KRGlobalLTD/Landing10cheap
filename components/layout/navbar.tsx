@@ -4,8 +4,10 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { TrackableCta } from '@/components/analytics/trackable-cta';
+import { usePageTransition } from '@/components/ui/page-transition';
 
 export function Navbar() {
+  const { navigateTo } = usePageTransition();
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(true);
   const [logoVisible, setLogoVisible] = useState(false);
@@ -153,14 +155,13 @@ export function Navbar() {
               FAQ
             </Link>
             <div className="mt-2 pt-2 border-t border-white/8">
-              <Link
-                href="/formulaire"
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-center rounded-xl px-4 py-3 text-sm font-bold text-zinc-950 transition-opacity hover:opacity-90"
+              <button
+                onClick={() => { setOpen(false); navigateTo('/formulaire'); }}
+                className="flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-bold text-zinc-950 transition-opacity hover:opacity-90"
                 style={{ backgroundColor: '#AAFF00' }}
               >
                 Créer mon site
-              </Link>
+              </button>
             </div>
           </div>
           </div>

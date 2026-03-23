@@ -45,7 +45,7 @@ const Card = React.forwardRef<HTMLDivElement, { children: React.ReactNode; style
 });
 Card.displayName = 'Card';
 
-function PerformancesCard({ started }: { started: boolean }) {
+function PerformancesCard({ started, height = 260 }: { started: boolean; height?: number }) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ function PerformancesCard({ started }: { started: boolean }) {
   }, [started]);
 
   return (
-    <Card style={{ height: 260 }}>
+    <Card style={{ height }}>
       <Badge label="Performance" />
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 20 }}>
         <span style={{ fontSize: 64, fontWeight: 700, color: LIME, lineHeight: 1 }}>{count}</span>
@@ -75,17 +75,17 @@ function PerformancesCard({ started }: { started: boolean }) {
       <div style={{ marginTop: 'auto' }}>
         <h3 style={{ fontSize: 15, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>Performances maximales</h3>
         <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.5, margin: 0 }}>
-          Score Lighthouse 90+ par défaut. Images optimisées, chargement rapide.
+          Votre site charge en moins d&apos;une seconde. Google vous récompense, vos visiteurs restent.
         </p>
       </div>
     </Card>
   );
 }
 
-function SeoCard() {
+function SeoCard({ height = 260 }: { height?: number }) {
   const bullets = ['SSR / rendu serveur', 'Schema.org LocalBusiness', 'Sitemap automatique', 'Meta tags optimisés'];
   return (
-    <Card style={{ height: 260, padding: 0, overflow: 'hidden' }}>
+    <Card style={{ height, padding: 0, overflow: 'hidden' }}>
       <div style={{ backgroundColor: '#0d0d0d', paddingTop: 20, paddingLeft: 20, paddingRight: 20, paddingBottom: 8, height: 110, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 7 }}>
         {bullets.map(b => (
           <div key={b} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -98,14 +98,14 @@ function SeoCard() {
         <Badge label="SEO" />
         <h3 style={{ fontSize: 15, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>Optimisé pour Google</h3>
         <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.5, margin: 0 }}>
-          Rendu serveur, Schema.org, sitemap automatique.
+          Vos clients vous trouvent sur Google sans que vous ayez rien à faire.
         </p>
       </div>
     </Card>
   );
 }
 
-function DesignCard() {
+function DesignCard({ height = 260 }: { height?: number }) {
   const colors = ['#c9a96e', '#2d6a4f', '#1d3557', '#e63946', '#9b5de5'];
   const [visible, setVisible] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -129,7 +129,7 @@ function DesignCard() {
   }, []);
 
   return (
-    <Card style={{ height: 260, padding: 0, overflow: 'hidden' }} ref={cardRef}>
+    <Card style={{ height, padding: 0, overflow: 'hidden' }} ref={cardRef}>
       <div style={{ backgroundColor: '#0d0d0d', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', flex: 1 }}>
         <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
           {colors.map((c, i) => (
@@ -150,7 +150,7 @@ function DesignCard() {
         <Badge label="Design" />
         <h3 style={{ fontSize: 15, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>Un design fait pour vous.</h3>
         <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.5, margin: 0 }}>
-          Choisissez votre palette de couleurs. La typographie s&apos;adapte automatiquement à votre style.
+          Choisissez vos couleurs. On s&apos;occupe du reste — chaque site est unique.
         </p>
       </div>
     </Card>
@@ -159,7 +159,7 @@ function DesignCard() {
 
 const DOMAINS = ['café-de-paris.fr', 'café-de-paris.krglobalsolutionsltd.com'];
 
-function HostingCard({ fixedHeight = false }: { fixedHeight?: boolean }) {
+function HostingCard({ fixedHeight = false, height = 260 }: { fixedHeight?: boolean; height?: number }) {
   const [domainIdx, setDomainIdx] = useState(0);
   const [fade, setFade] = useState(true);
 
@@ -175,7 +175,7 @@ function HostingCard({ fixedHeight = false }: { fixedHeight?: boolean }) {
   }, []);
 
   return (
-    <Card style={{ ...(fixedHeight ? { height: 260 } : { minHeight: 260 }), padding: 0, overflow: 'hidden' }}>
+    <Card style={{ ...(fixedHeight ? { height } : { minHeight: height }), padding: 0, overflow: 'hidden' }}>
       <div style={{ backgroundColor: '#0d0d0d', paddingTop: 16, paddingLeft: 16, paddingRight: 16, paddingBottom: 0, height: 110, display: 'flex', alignItems: 'flex-start' }}>
         <div style={{ borderRadius: 8, border: '1px solid #2a2a2a', overflow: 'hidden', width: '100%' }}>
           <div style={{ backgroundColor: '#1a1a1a', height: 32, display: 'flex', alignItems: 'center', padding: '0 8px', gap: 6 }}>
@@ -219,7 +219,7 @@ function HostingCard({ fixedHeight = false }: { fixedHeight?: boolean }) {
         <Badge label="Hébergement" />
         <h3 style={{ fontSize: 15, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>En ligne en un clic</h3>
         <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.5, margin: 0 }}>
-          Sous-domaine krglobalsolutionsltd.com ou votre propre domaine.
+          Votre site en ligne immédiatement. Votre domaine, ou le nôtre — à vous de choisir.
         </p>
       </div>
     </Card>
@@ -243,7 +243,7 @@ export function FeaturesSection() {
 
   return (
     <section id="features" className="border-y border-white/5 py-24">
-      <div ref={ref} className="px-4 md:px-[40px]" style={{ maxWidth: 900, margin: '0 auto' }}>
+      <div ref={ref} className="px-4 md:px-8">
         <div className="mx-auto max-w-2xl text-center mb-14">
           <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
             Un site complet,{' '}
@@ -254,7 +254,7 @@ export function FeaturesSection() {
           </p>
         </div>
 
-        <div className="hidden lg:flex lg:flex-col" style={{ gap: 16 }}>
+        <div className="hidden lg:flex lg:flex-col mx-auto" style={{ gap: 16, maxWidth: 1100 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '58fr 42fr', gap: 16 }}>
             <PerformancesCard started={started} />
             <SeoCard />

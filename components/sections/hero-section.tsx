@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
+import { usePageTransition } from "@/components/ui/page-transition";
 
 const METIERS = [
   "Plombier",
@@ -17,11 +17,8 @@ const METIERS = [
   "Dentiste",
 ];
 
-type Phase = "idle" | "leaving" | "fading";
-
 export function HeroSection() {
-  const router = useRouter();
-  const [phase, setPhase] = useState<Phase>("idle");
+  const { navigateTo } = usePageTransition();
   const [metier, setMetier] = useState("");
   const [ville, setVille] = useState("");
   const metierRef = useRef<HTMLInputElement>(null);
@@ -69,13 +66,11 @@ export function HeroSection() {
 
   function handleSubmit(e?: React.FormEvent) {
     e?.preventDefault();
-    if (typeof window !== "undefined") {
-      localStorage.setItem("prefill_metier", metier);
-      localStorage.setItem("prefill_ville", ville);
-    }
-    setPhase("leaving");
-    setTimeout(() => setPhase("fading"), 480);
-    setTimeout(() => router.push("/formulaire"), 780);
+    const params = new URLSearchParams();
+    if (metier) params.set("metier", metier);
+    if (ville) params.set("ville", ville);
+    const query = params.toString();
+    navigateTo(`/formulaire${query ? `?${query}` : ""}`);
   }
 
   return (
@@ -86,6 +81,12 @@ export function HeroSection() {
           50% { opacity: 0; }
         }
         .hero-cursor { animation: cursor-blink 0.9s step-end infinite; }
+
+        @keyframes hero-fadein {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .hero-fadein { animation: hero-fadein 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
       `}</style>
 
       {/* Glow */}
@@ -100,15 +101,15 @@ export function HeroSection() {
 
         {/* 2. Titre */}
         <h1 className="font-bold tracking-tighter leading-none mb-6 text-[44px] md:text-[82px]">
-          <span className="text-white block">Votre site web</span>
-          <span className="relative block" style={{ color: "#AAFF00" }}>
+          <span className="hero-fadein text-white block" style={{ animationDelay: "0.1s" }}>Votre site web</span>
+          <span className="hero-fadein relative block" style={{ color: "#AAFF00", animationDelay: "0.25s" }}>
             en 30 secondes.
             <span className="absolute inset-x-0 bottom-0 pointer-events-none" style={{ height: "45%", background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%)" }} />
           </span>
         </h1>
 
         {/* 3. Sous-titre */}
-        <p className="mb-10 md:mb-36 leading-relaxed" style={{ color: "#a0a0a0", fontSize: 15, maxWidth: 480 }}>
+        <p className="hero-fadein mb-10 md:mb-36 leading-relaxed" style={{ color: "#a0a0a0", fontSize: 15, maxWidth: 480, animationDelay: "0.4s" }}>
           Renseignez vos informations avec vos mots. Notre IA se charge de créer un site qui vous correspond.
         </p>
 
@@ -116,7 +117,8 @@ export function HeroSection() {
         {/* Desktop — barre horizontale */}
         <form
           onSubmit={handleSubmit}
-          className="hidden md:flex items-center"
+          className="hero-fadein hidden md:flex items-center"
+          style={{ animationDelay: "0.55s" }}
           style={{
             maxWidth: 560,
             width: "100%",
@@ -183,8 +185,9 @@ export function HeroSection() {
         {/* Mobile — vertical */}
         <form
           onSubmit={handleSubmit}
-          className="flex md:hidden items-center"
+          className="hero-fadein flex md:hidden items-center"
           style={{
+            animationDelay: "0.55s",
             width: "min(420px, calc(100% - 32px))",
             backgroundColor: "#1a1a1a",
             border: "1px solid #2a2a2a",
@@ -246,7 +249,7 @@ export function HeroSection() {
 
 
         {/* 6. Badges de réassurance */}
-        <div className="flex flex-wrap items-center justify-center mt-6" style={{ gap: 32 }}>
+        <div className="hero-fadein flex flex-wrap items-center justify-center mt-6" style={{ gap: 32, animationDelay: "0.7s" }}>
           {["Responsive", "Hébergement inclus", "En ligne immédiatement"].map(text => (
             <span key={text} className="flex items-center gap-1.5 text-sm" style={{ color: "#6b7280" }}>
               <span style={{ color: "#AAFF00" }}>✓</span>
@@ -256,11 +259,6 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Fade overlay */}
-      <div
-        className="absolute inset-0 z-30 bg-zinc-950 pointer-events-none transition-opacity duration-300"
-        style={{ opacity: phase === "fading" ? 1 : 0 }}
-      />
     </div>
   );
 }

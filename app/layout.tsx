@@ -4,6 +4,7 @@ import { AnalyticsProvider } from '@/components/analytics-provider';
 import { SITE_CONFIG } from '@/lib/constants/site';
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { PageTransitionProvider } from '@/components/ui/page-transition';
 
 const geist = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -58,7 +59,9 @@ export default function RootLayout({
     <html lang="fr" className={cn("font-sans", geist.variable)}>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <AnalyticsProvider />
-        <div className="relative flex min-h-screen flex-col">{children}</div>
+        <PageTransitionProvider>
+          <div className="relative flex min-h-screen flex-col">{children}</div>
+        </PageTransitionProvider>
       </body>
     </html>
   );
