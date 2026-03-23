@@ -3,17 +3,15 @@ import type { FaqItem, FooterLinkGroup, NavItem, OfferItem } from '@/lib/types/s
 export const SITE_CONFIG = {
   name: 'Siteasy',
   description:
-    'Votre landing page simple et professionnelle pour 10 €, livrée sous 24h, hébergement et mise en ligne inclus.',
+    'Votre landing page simple et professionnelle pour 10 €, en ligne en 30 secondes, hébergement et mise en ligne inclus.',
   price: '10 €',
-  deliveryDelay: '24h',
+  deliveryDelay: '30 secondes',
   whatsapp: 'https://wa.me/0000000000'
 } as const;
 
 export const MAIN_NAVIGATION: NavItem[] = [
   { label: 'Accueil', href: '/' },
   { label: 'Formulaire', href: '/formulaire' },
-  { label: 'Checkout', href: '/checkout' },
-  { label: 'Paiement', href: '/paiement' },
   { label: 'Support', href: '/support' }
 ];
 
@@ -23,7 +21,7 @@ export const BENEFITS: OfferItem[] = [
     description: 'Idéal pour présenter votre activité rapidement, sans vous perdre dans la technique.'
   },
   {
-    title: 'Livrée sous 24h',
+    title: 'En ligne en 30 secondes',
     description: 'Votre page est produite et mise en ligne en une journée après validation.'
   },
   {
@@ -42,7 +40,7 @@ export const HOW_IT_WORKS: OfferItem[] = [
     description: 'Nous construisons une page sobre, claire et orientée conversion.'
   },
   {
-    title: '3. Mise en ligne en 24h',
+    title: '3. Mise en ligne en 30 secondes',
     description: 'Vous recevez une page prête à être partagée avec vos prospects.'
   }
 ];

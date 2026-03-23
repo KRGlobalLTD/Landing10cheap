@@ -2,7 +2,7 @@ export const SITEASY_PAYMENT = {
   amountInCents: 1499,
   currency: 'eur',
   name: 'Siteasy 10€',
-  description: 'Landing page 1 page livrée sous 24h avec hébergement inclus'
+  description: 'Site web en ligne en 30 secondes avec hébergement inclus'
 } as const;
 
 export const PAYMENT_METADATA = {

@@ -17,14 +17,14 @@ const COMPARISON = [
   { item: 'Design sur-mesure', us: true, agency: true },
   { item: 'Hébergement inclus', us: true, agency: false },
   { item: 'SEO de base', us: true, agency: false },
-  { item: 'Livraison en 24h', us: true, agency: false },
+  { item: 'En ligne en 30 secondes', us: true, agency: false },
   { item: 'Modifications rapides', us: true, agency: false },
   { item: 'Prix transparent', us: true, agency: false }
 ];
 
 export function PricingSection() {
   return (
-    <section className="py-24">
+    <section id="pricing" className="py-24">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <p className="mb-3 text-xs font-medium uppercase tracking-widest text-muted/50">
@@ -39,9 +39,9 @@ export function PricingSection() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-2 lg:items-start">
+        <div className="mt-14 grid gap-8 lg:grid-cols-2 lg:items-stretch">
           {/* Pricing card */}
-          <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.03] p-8">
+          <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.03] p-8 flex flex-col">
             {/* Glow */}
             <div
               className="pointer-events-none absolute inset-0"
@@ -86,7 +86,7 @@ export function PricingSection() {
           </div>
 
           {/* Comparison table */}
-          <div className="space-y-4">
+          <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.03] p-8 flex flex-col space-y-4">
             <h3 className="text-base font-semibold text-foreground">
               Pourquoi pas une agence ?
             </h3>
@@ -98,7 +98,7 @@ export function PricingSection() {
               {/* Header */}
               <div className="grid grid-cols-3 border-b border-white/8 bg-white/[0.02] px-4 py-3">
                 <span className="text-xs font-medium text-muted" />
-                <span className="text-center text-xs font-semibold text-foreground">Notre générateur</span>
+                <span className="text-center text-xs font-semibold text-foreground">Avec Siteasy</span>
                 <span className="text-center text-xs text-muted">Agence classique</span>
               </div>
 

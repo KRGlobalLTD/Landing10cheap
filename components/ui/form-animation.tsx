@@ -184,7 +184,7 @@ function Phase4() {
       </div>
       <div className="text-center space-y-0.5">
         <p className="text-sm font-bold text-white">Votre site est prêt !</p>
-        <p className="text-[10px] text-zinc-500">En ligne dans moins de 24h</p>
+        <p className="text-[10px] text-zinc-500">En ligne en 30 secondes</p>
       </div>
       <div className="w-full h-1 rounded-full bg-white/8 overflow-hidden">
         <div className="h-full rounded-full" style={{ width: `${progress}%`, backgroundColor: '#AAFF00', transition: `width ${PHASE_DURATIONS[3] * 0.75}ms cubic-bezier(0.4,0,0.2,1)` }} />

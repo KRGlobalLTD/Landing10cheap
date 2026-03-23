@@ -71,7 +71,7 @@ export function buildCustomerOrderConfirmationEmailTemplate(
       <h2 style="font-size:16px;margin:0 0 12px;">Résumé rapide</h2>
       <p style="margin:0 0 6px;font-size:14px;"><strong>Service :</strong> Landing page 1 page</p>
       <p style="margin:0 0 6px;font-size:14px;"><strong>Montant :</strong> 10 €</p>
-      <p style="margin:0 0 6px;font-size:14px;"><strong>Livraison :</strong> sous 24h</p>
+      <p style="margin:0 0 6px;font-size:14px;"><strong>Livraison :</strong> en 30 secondes</p>
       <p style="margin:0 0 6px;font-size:14px;"><strong>Inclus :</strong> hébergement, mise en ligne, 1 correction mineure</p>
       <p style="margin:0 0 6px;font-size:14px;"><strong>Référence :</strong> ${escapeHtml(reference)}</p>
       <p style="margin:0 0 6px;font-size:14px;"><strong>Activité :</strong> ${escapeHtml(businessName)}</p>
@@ -113,7 +113,7 @@ export function buildCustomerOrderConfirmationEmailTemplate(
     'Résumé rapide :',
     '- Service : Landing page 1 page',
     '- Montant : 10 €',
-    '- Livraison : sous 24h',
+    '- Livraison : en 30 secondes',
     '- Inclus : hébergement, mise en ligne, 1 correction mineure',
     `- Référence : ${reference}`,
     `- Activité : ${businessName}`,

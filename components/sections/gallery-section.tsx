@@ -64,7 +64,8 @@ export function GallerySection() {
 
         {/* Grid */}
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {SITES.map((site) => (
+          {SITES.map((site, i) => (
+            <div key={`wrapper-${site.name}`} className={i >= 4 ? 'hidden sm:block' : ''}>
             <div
               key={site.name}
               className="group overflow-hidden rounded-2xl border border-white/8 bg-[#0c0c0f] transition-all hover:border-white/15 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] cursor-pointer"
@@ -122,6 +123,7 @@ export function GallerySection() {
                   <p className="text-xs text-muted">{site.tag}</p>
                 </div>
               </div>
+            </div>
             </div>
           ))}
         </div>

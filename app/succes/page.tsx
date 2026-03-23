@@ -28,7 +28,7 @@ export default function SuccesPage() {
           votre commande.
         </p>
         <p className="text-sm text-zinc-300">
-          Une fois validée, nous lançons la préparation de votre landing page 1 page. Livraison prévue sous 24h avec
+          Une fois validée, nous lançons la préparation de votre landing page 1 page. Livraison en 30 secondes avec
           hébergement inclus.
         </p>
         <div className="flex flex-wrap gap-3">

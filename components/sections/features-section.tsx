@@ -64,7 +64,7 @@ function SeoCard() {
   return (
     <Card style={{ height: 260, padding: 0, overflow: 'hidden' }}>
       {/* Zone visuelle haut */}
-      <div style={{ backgroundColor: '#0d0d0d', padding: '16px 20px', height: 110, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 7 }}>
+      <div style={{ backgroundColor: '#0d0d0d', padding: '20px 20px 16px', height: 140, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 7 }}>
         {bullets.map(b => (
           <div key={b} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <span style={{ color: LIME, fontSize: 13, flexShrink: 0 }}>✓</span>
@@ -111,9 +111,9 @@ function DesignCard() {
 
 function HostingCard() {
   return (
-    <Card style={{ height: 260, padding: 0, overflow: 'hidden' }}>
+    <Card style={{ minHeight: 260, padding: 0, overflow: 'hidden' }}>
       {/* Zone visuelle haut — mockup navigateur */}
-      <div style={{ backgroundColor: '#0d0d0d', padding: '16px 20px', flex: 1, display: 'flex', alignItems: 'center' }}>
+      <div style={{ backgroundColor: '#0d0d0d', padding: 16, display: 'flex', alignItems: 'center' }}>
         <div style={{ borderRadius: 8, border: '1px solid #2a2a2a', overflow: 'hidden', width: '100%' }}>
           <div style={{ backgroundColor: '#1a1a1a', height: 28, display: 'flex', alignItems: 'center', padding: '0 10px', gap: 8 }}>
             <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
@@ -150,8 +150,8 @@ function HostingCard() {
 
 export function FeaturesSection() {
   return (
-    <section className="border-y border-white/5 py-24">
-      <div style={{ maxWidth: 900, margin: '0 auto', paddingLeft: 40, paddingRight: 40 }}>
+    <section id="features" className="border-y border-white/5 py-24">
+      <div className="px-4 md:px-10" style={{ maxWidth: 900, margin: '0 auto' }}>
         {/* Header */}
         <div className="mx-auto max-w-2xl text-center mb-14">
           <p className="mb-3 text-xs font-medium uppercase tracking-widest text-muted/50">Ce qui est inclus</p>

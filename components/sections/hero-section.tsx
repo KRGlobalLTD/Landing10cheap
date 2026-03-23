@@ -94,41 +94,39 @@ export function HeroSection() {
         style={{ backgroundImage: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(170,255,0,0.08) 0%, transparent 60%)" }}
       />
 
-      <div className="relative z-10 flex flex-col items-center text-center px-4 sm:px-6"
+      <div className="relative z-10 flex flex-col items-center text-center px-8 sm:px-12"
         style={{ paddingTop: 140, paddingBottom: 100 }}
       >
 
         {/* 2. Titre */}
-        <h1 className="font-bold tracking-tighter leading-none mb-6" style={{ fontSize: 72 }}>
+        <h1 className="font-bold tracking-tighter leading-none mb-6" style={{ fontSize: 44 }}>
           <span className="text-white block">Votre site web</span>
           <span className="block" style={{ color: "#AAFF00" }}>en 30 secondes.</span>
         </h1>
 
         {/* 3. Sous-titre */}
-        <p className="mb-40 leading-relaxed" style={{ color: "#a0a0a0", fontSize: 18, maxWidth: 560 }}>
-          Décrivez votre activité, notre IA génère automatiquement votre site.
-          Responsive, hébergé, en ligne immédiatement.
+        <p className="mb-40 leading-relaxed" style={{ color: "#a0a0a0", fontSize: 15, maxWidth: 480 }}>
+          Renseignez vos informations avec vos mots. Notre IA se charge de créer un site qui vous correspond.
         </p>
 
         {/* 4. Barre de saisie */}
         <form
           onSubmit={handleSubmit}
-          className="w-full flex items-center"
+          className="flex items-center"
           style={{
-            maxWidth: 600,
+            width: "min(420px, calc(100% - 32px))",
             backgroundColor: "#1a1a1a",
             border: "1px solid #2a2a2a",
-            borderRadius: 50,
-            padding: "6px 6px 6px 20px",
+            borderRadius: 16,
+            padding: 8,
             gap: 0,
-            height: 58,
+            flexDirection: "column",
           }}
         >
           {/* Métier field */}
-          <div className="flex items-center gap-2 flex-1 min-w-0" style={{ overflow: "hidden" }}>
+          <div className="flex items-center gap-2 w-full px-3" style={{ height: 48, backgroundColor: "#242424", borderRadius: 10, border: "1px solid #2f2f2f" }}>
             <span className="text-sm shrink-0 select-none" style={{ color: "#6b7280" }}>Je suis</span>
-            <div className="relative flex-1 min-w-0 flex items-center" style={{ height: 24 }}>
-              {/* Actual input (invisible text when empty, white when typing) */}
+            <div className="relative flex-1 min-w-0 flex items-center h-full">
               <input
                 ref={metierRef}
                 type="text"
@@ -143,7 +141,6 @@ export function HeroSection() {
                   color: (metier === "" && !metierFocused) ? "transparent" : "white",
                 }}
               />
-              {/* Animated overlay (shown only when empty and not focused) */}
               {metier === "" && !metierFocused && (
                 <span className="flex items-center text-sm font-semibold pointer-events-none select-none whitespace-nowrap overflow-hidden" style={{ color: "#AAFF00", maxWidth: "100%" }}>
                   {animatedPlaceholder || <span style={{ color: "#4b5563" }}>métier...</span>}
@@ -155,11 +152,8 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Divider */}
-          <div style={{ width: 1, alignSelf: "stretch", backgroundColor: "#2a2a2a", flexShrink: 0, margin: "10px 0" }} />
-
           {/* Ville field */}
-          <div className="flex items-center gap-2 flex-1 min-w-0 px-4">
+          <div className="flex items-center gap-2 w-full px-3 mt-2" style={{ height: 48, backgroundColor: "#242424", borderRadius: 10, border: "1px solid #2f2f2f" }}>
             <span className="text-sm shrink-0 select-none" style={{ color: "#6b7280" }}>à</span>
             <input
               type="text"
@@ -171,11 +165,12 @@ export function HeroSection() {
             />
           </div>
 
-          {/* Button */}
+          {/* Button — pleine largeur */}
+          <div style={{ height: 8 }} />
           <button
             type="submit"
-            className="inline-flex items-center gap-1.5 font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all flex-shrink-0"
-            style={{ backgroundColor: "#AAFF00", borderRadius: 50, padding: "12px 22px" }}
+            className="inline-flex items-center justify-center gap-1.5 font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all w-full"
+            style={{ backgroundColor: "#AAFF00", borderRadius: 10, padding: "14px 0", marginTop: 4 }}
           >
             Créer mon site
             <ArrowRight className="w-4 h-4" />
