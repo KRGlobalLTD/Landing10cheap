@@ -44,7 +44,7 @@ export function Navbar() {
           <div className="flex h-10 w-full items-center justify-between">
             <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center">
-              <Image src="/logo/logo-horizontal.svg" alt="Siteasy" width={72} height={28} priority className="block" style={{ marginTop: -4 }} />
+              <Image src="/logo/logo-horizontal.svg" alt="Siteasy" width={72} height={32} priority className="block" />
             </Link>
 
             {/* Nav desktop */}
@@ -99,19 +99,17 @@ export function Navbar() {
         {open && (
           <div className="md:hidden mt-2">
           <div className="rounded-2xl border border-white/10 bg-zinc-950 shadow-[0_8px_32px_rgba(0,0,0,0.4)] px-5 py-4 flex flex-col gap-1">
-            <Link
-              href="/#features"
-              onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 text-sm text-muted hover:text-foreground hover:bg-white/5 transition-colors"
-            >
+            <Link href="/#features" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm text-muted hover:text-foreground hover:bg-white/5 transition-colors">
               Fonctionnalités
             </Link>
-            <Link
-              href="/#pricing"
-              onClick={() => setOpen(false)}
-              className="rounded-xl px-4 py-3 text-sm text-muted hover:text-foreground hover:bg-white/5 transition-colors"
-            >
+            <Link href="/#pricing" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm text-muted hover:text-foreground hover:bg-white/5 transition-colors">
               Nos tarifs
+            </Link>
+            <Link href="/#gallery" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm text-muted hover:text-foreground hover:bg-white/5 transition-colors">
+              Exemples
+            </Link>
+            <Link href="/#faq" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm text-muted hover:text-foreground hover:bg-white/5 transition-colors">
+              FAQ
             </Link>
             <div className="mt-2 pt-2 border-t border-white/8">
               <Link

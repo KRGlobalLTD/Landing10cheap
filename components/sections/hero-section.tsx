@@ -105,7 +105,7 @@ export function HeroSection() {
         </h1>
 
         {/* 3. Sous-titre */}
-        <p className="mb-52 md:mb-36 leading-relaxed" style={{ color: "#a0a0a0", fontSize: 15, maxWidth: 480 }}>
+        <p className="mb-10 md:mb-36 leading-relaxed" style={{ color: "#a0a0a0", fontSize: 15, maxWidth: 480 }}>
           Renseignez vos informations avec vos mots. Notre IA se charge de créer un site qui vous correspond.
         </p>
 
