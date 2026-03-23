@@ -244,7 +244,7 @@ export function HeroSection() {
 
         {/* 6. Badges de réassurance */}
         <div className="flex flex-wrap items-center justify-center mt-6" style={{ gap: 32 }}>
-          {["Responsive", "Hébergé inclus", "En ligne immédiatement"].map(text => (
+          {["Responsive", "Hébergement inclus", "En ligne immédiatement"].map(text => (
             <span key={text} className="flex items-center gap-1.5 text-sm" style={{ color: "#6b7280" }}>
               <span style={{ color: "#AAFF00" }}>✓</span>
               {text}

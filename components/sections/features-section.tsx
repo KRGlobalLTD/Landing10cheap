@@ -159,7 +159,7 @@ function DesignCard() {
 
 const DOMAINS = ['café-de-paris.fr', 'café-de-paris.krglobalsolutionsltd.com'];
 
-function HostingCard() {
+function HostingCard({ fixedHeight = false }: { fixedHeight?: boolean }) {
   const [domainIdx, setDomainIdx] = useState(0);
   const [fade, setFade] = useState(true);
 
@@ -175,7 +175,7 @@ function HostingCard() {
   }, []);
 
   return (
-    <Card style={{ height: 260, padding: 0, overflow: 'hidden' }}>
+    <Card style={{ ...(fixedHeight ? { height: 260 } : { minHeight: 260 }), padding: 0, overflow: 'hidden' }}>
       <div style={{ backgroundColor: '#0d0d0d', paddingTop: 16, paddingLeft: 16, paddingRight: 16, paddingBottom: 0, height: 110, display: 'flex', alignItems: 'flex-start' }}>
         <div style={{ borderRadius: 8, border: '1px solid #2a2a2a', overflow: 'hidden', width: '100%' }}>
           <div style={{ backgroundColor: '#1a1a1a', height: 32, display: 'flex', alignItems: 'center', padding: '0 8px', gap: 6 }}>
@@ -261,7 +261,7 @@ export function FeaturesSection() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '42fr 58fr', gap: 16 }}>
             <DesignCard />
-            <HostingCard />
+            <HostingCard fixedHeight />
           </div>
         </div>
 
