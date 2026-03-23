@@ -88,7 +88,6 @@ export default function FormulairePage() {
         console.error('[checkout] Stripe API error:', payload);
         throw new Error(payload.error ?? 'Impossible de créer la session de paiement.');
       }
-      setIsSuccess(true);
       window.location.href = payload.url;
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.');
