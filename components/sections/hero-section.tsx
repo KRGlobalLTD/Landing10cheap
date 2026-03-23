@@ -118,8 +118,8 @@ export function HeroSection() {
         <form
           onSubmit={handleSubmit}
           className="hero-fadein hidden md:flex items-center"
-          style={{ animationDelay: "0.55s" }}
           style={{
+            animationDelay: "0.55s",
             maxWidth: 560,
             width: "100%",
             backgroundColor: "#1a1a1a",
