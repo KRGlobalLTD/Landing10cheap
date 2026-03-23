@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <footer className="border-t border-white/5 py-12">
       <Container>
-        <div className="grid gap-10 md:grid-cols-3">
+        <div className="grid gap-10 md:grid-cols-3 items-start">
           <div className="space-y-3">
             <Image src="/logo/logo-horizontal.svg" alt="Siteasy" width={100} height={25} />
             <p className="text-sm leading-relaxed text-muted">{SITE_CONFIG.description}</p>

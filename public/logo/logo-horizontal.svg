@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50" width="200" height="50">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 113 50" width="113" height="50">
   <defs>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;display=swap');
     </style>
   </defs>
   <text
-    x="100"
+    x="2"
     y="25"
-    text-anchor="middle"
+    text-anchor="start"
     dominant-baseline="central"
     font-family="Inter, system-ui, -apple-system, sans-serif"
     font-weight="700"

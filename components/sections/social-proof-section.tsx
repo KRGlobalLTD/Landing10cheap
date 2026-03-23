@@ -89,10 +89,10 @@ export function SocialProofSection() {
   }, []);
 
   return (
-    <section className="border-y border-white/5 py-4">
+    <section ref={ref} className="py-4 md:py-16">
       <Container>
         {/* Mobile — 2x2 */}
-        <div ref={ref} className="grid grid-cols-2 md:hidden">
+        <div className="grid grid-cols-2 md:hidden">
           {STATS.map((stat, i) => (
             <StatCounter key={stat.label} stat={stat} started={started} index={i} />
           ))}

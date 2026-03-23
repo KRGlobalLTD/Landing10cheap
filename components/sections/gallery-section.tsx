@@ -47,15 +47,15 @@ const SITES = [
 
 export function GallerySection() {
   return (
-    <section className="py-24">
+    <section id="gallery" className="py-24">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <p className="mb-3 text-xs font-medium uppercase tracking-widest text-muted/50">
             Galerie
           </p>
           <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-            Des sites générés pour{' '}
-            <span style={{ color: '#AAFF00' }}>tous les métiers.</span>
+            Votre projet,{' '}
+            <span style={{ color: '#AAFF00' }}>votre site.</span>
           </h2>
           <p className="mt-4 text-sm text-muted">
             Chaque site est unique, adapté à l&apos;activité et au style de son créateur.

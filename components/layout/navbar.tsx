@@ -7,7 +7,21 @@ import { TrackableCta } from '@/components/analytics/trackable-cta';
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    function handleScroll() {
+      const currentY = window.scrollY;
+      if (currentY < 60) { setVisible(true); }
+      else if (currentY > lastScrollY.current) { setVisible(false); setOpen(false); }
+      else { setVisible(true); }
+      lastScrollY.current = currentY;
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -20,29 +34,40 @@ export function Navbar() {
   }, [open]);
 
   return (
-    <header className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
+    <header
+      className="fixed left-0 right-0 z-50 flex justify-center px-4 transition-all duration-300"
+      style={{ top: visible ? 16 : -80 }}
+    >
       <div className="w-full max-w-3xl" ref={ref}>
         {/* Barre principale */}
-        <div className="rounded-full border border-white/10 bg-white/5 pl-3 pr-3 md:px-5 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl">
-          <div className="flex h-14 w-full items-center justify-between">
+        <div className="rounded-full border border-white/10 bg-white/5 pl-3 pr-1.5 md:pl-5 md:pr-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+          <div className="flex h-10 w-full items-center justify-between">
+            <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center">
-              <Image src="/logo/logo-horizontal.svg" alt="Siteasy" width={120} height={30} priority />
+              <Image src="/logo/logo-horizontal.svg" alt="Siteasy" width={72} height={28} priority className="block" style={{ marginTop: -4 }} />
             </Link>
 
             {/* Nav desktop */}
             <nav className="hidden items-center gap-6 md:flex" aria-label="Navigation principale">
-              <Link href="/#features" className="text-sm text-muted transition-colors hover:text-foreground">
+              <Link href="/#features" className="text-xs text-muted transition-colors hover:text-foreground">
                 Fonctionnalités
               </Link>
-              <Link href="/#pricing" className="text-sm text-muted transition-colors hover:text-foreground">
+              <Link href="/#pricing" className="text-xs text-muted transition-colors hover:text-foreground">
                 Nos tarifs
               </Link>
+              <Link href="/#gallery" className="text-xs text-muted transition-colors hover:text-foreground">
+                Exemples
+              </Link>
+              <Link href="/#faq" className="text-xs text-muted transition-colors hover:text-foreground">
+                FAQ
+              </Link>
             </nav>
+            </div>
 
             {/* CTA desktop */}
             <TrackableCta
               href="/formulaire"
-              className="hidden h-9 rounded-full px-4 text-xs sm:text-sm md:flex"
+              className="hidden h-7 rounded-full px-3 text-xs md:flex"
               location="navbar_cta"
             >
               Commencer

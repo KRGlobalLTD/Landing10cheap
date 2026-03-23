@@ -99,32 +99,33 @@ export function HeroSection() {
       >
 
         {/* 2. Titre */}
-        <h1 className="font-bold tracking-tighter leading-none mb-6" style={{ fontSize: 44 }}>
+        <h1 className="font-bold tracking-tighter leading-none mb-6 text-[44px] md:text-[72px]">
           <span className="text-white block">Votre site web</span>
           <span className="block" style={{ color: "#AAFF00" }}>en 30 secondes.</span>
         </h1>
 
         {/* 3. Sous-titre */}
-        <p className="mb-40 leading-relaxed" style={{ color: "#a0a0a0", fontSize: 15, maxWidth: 480 }}>
+        <p className="mb-52 md:mb-36 leading-relaxed" style={{ color: "#a0a0a0", fontSize: 15, maxWidth: 480 }}>
           Renseignez vos informations avec vos mots. Notre IA se charge de créer un site qui vous correspond.
         </p>
 
         {/* 4. Barre de saisie */}
+        {/* Desktop — barre horizontale */}
         <form
           onSubmit={handleSubmit}
-          className="flex items-center"
+          className="hidden md:flex items-center"
           style={{
-            width: "min(420px, calc(100% - 32px))",
+            maxWidth: 560,
+            width: "100%",
             backgroundColor: "#1a1a1a",
             border: "1px solid #2a2a2a",
-            borderRadius: 16,
+            borderRadius: 9999,
             padding: 8,
             gap: 0,
-            flexDirection: "column",
           }}
         >
-          {/* Métier field */}
-          <div className="flex items-center gap-2 w-full px-3" style={{ height: 48, backgroundColor: "#242424", borderRadius: 10, border: "1px solid #2f2f2f" }}>
+          {/* Métier */}
+          <div className="flex items-center gap-2 flex-1 min-w-0 px-3" style={{ height: 48 }}>
             <span className="text-sm shrink-0 select-none" style={{ color: "#6b7280" }}>Je suis</span>
             <div className="relative flex-1 min-w-0 flex items-center h-full">
               <input
@@ -151,9 +152,10 @@ export function HeroSection() {
               )}
             </div>
           </div>
-
-          {/* Ville field */}
-          <div className="flex items-center gap-2 w-full px-3 mt-2" style={{ height: 48, backgroundColor: "#242424", borderRadius: 10, border: "1px solid #2f2f2f" }}>
+          {/* Divider vertical */}
+          <div style={{ width: 1, height: 24, backgroundColor: "#2a2a2a", flexShrink: 0 }} />
+          {/* Ville */}
+          <div className="flex items-center gap-2 flex-1 min-w-0 px-3" style={{ height: 48 }}>
             <span className="text-sm shrink-0 select-none" style={{ color: "#6b7280" }}>à</span>
             <input
               type="text"
@@ -164,13 +166,75 @@ export function HeroSection() {
               style={{ color: "white", caretColor: "#AAFF00", outline: "none" }}
             />
           </div>
+          {/* CTA */}
+          <button
+            type="submit"
+            className="inline-flex items-center justify-center gap-1.5 font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all shrink-0"
+            style={{ backgroundColor: "#AAFF00", borderRadius: 9999, padding: "14px 20px" }}
+          >
+            Créer mon site
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </form>
 
-          {/* Button — pleine largeur */}
+        {/* Mobile — vertical */}
+        <form
+          onSubmit={handleSubmit}
+          className="flex md:hidden items-center"
+          style={{
+            width: "min(420px, calc(100% - 32px))",
+            backgroundColor: "#1a1a1a",
+            border: "1px solid #2a2a2a",
+            borderRadius: 16,
+            padding: 8,
+            gap: 0,
+            flexDirection: "column",
+          }}
+        >
+          {/* Métier field */}
+          <div className="flex items-center gap-2 w-full px-3 rounded-[10px] border border-[#2f2f2f] bg-[#242424]" style={{ height: 48 }}>
+            <span className="text-sm shrink-0 select-none" style={{ color: "#6b7280" }}>Je suis</span>
+            <div className="relative flex-1 min-w-0 flex items-center h-full">
+              <input
+                type="text"
+                value={metier}
+                onChange={e => setMetier(e.target.value)}
+                onFocus={() => setMetierFocused(true)}
+                onBlur={() => setMetierFocused(false)}
+                className="absolute inset-0 w-full bg-transparent border-none text-sm font-semibold"
+                style={{
+                  outline: "none",
+                  caretColor: (metier === "" && !metierFocused) ? "transparent" : "#AAFF00",
+                  color: (metier === "" && !metierFocused) ? "transparent" : "white",
+                }}
+              />
+              {metier === "" && !metierFocused && (
+                <span className="flex items-center text-sm font-semibold pointer-events-none select-none whitespace-nowrap overflow-hidden" style={{ color: "#AAFF00", maxWidth: "100%" }}>
+                  {animatedPlaceholder || <span style={{ color: "#4b5563" }}>métier...</span>}
+                  {animatedPlaceholder && (
+                    <span className="hero-cursor inline-block w-[2px] h-3.5 ml-0.5 rounded-sm" style={{ backgroundColor: "#AAFF00", flexShrink: 0 }} />
+                  )}
+                </span>
+              )}
+            </div>
+          </div>
+          {/* Ville field */}
+          <div className="flex items-center gap-2 w-full px-3 mt-2 rounded-[10px] border border-[#2f2f2f] bg-[#242424]" style={{ height: 48 }}>
+            <span className="text-sm shrink-0 select-none" style={{ color: "#6b7280" }}>à</span>
+            <input
+              type="text"
+              value={ville}
+              onChange={e => setVille(e.target.value)}
+              placeholder="votre ville..."
+              className="flex-1 bg-transparent border-none text-white text-sm min-w-0"
+              style={{ color: "white", caretColor: "#AAFF00", outline: "none" }}
+            />
+          </div>
           <div style={{ height: 8 }} />
           <button
             type="submit"
             className="inline-flex items-center justify-center gap-1.5 font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all w-full"
-            style={{ backgroundColor: "#AAFF00", borderRadius: 10, padding: "14px 0", marginTop: 4 }}
+            style={{ backgroundColor: "#AAFF00", borderRadius: 10, padding: "14px 0" }}
           >
             Créer mon site
             <ArrowRight className="w-4 h-4" />

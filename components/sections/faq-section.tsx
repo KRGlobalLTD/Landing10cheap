@@ -42,11 +42,11 @@ export function FaqSection() {
   const [btnHovered, setBtnHovered] = useState(false);
 
   return (
-    <section style={{ paddingTop: 80, paddingBottom: 80 }}>
+    <section id="faq" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div style={{ maxWidth: 900, margin: '0 auto', paddingLeft: 40, paddingRight: 40 }}>
 
         {/* Mobile — colonne : titre centré + accordion */}
-        <div className="md:hidden" style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+        <div className="md:hidden flex flex-col gap-8">
           <h2 style={{ fontSize: 28, fontWeight: 700, color: '#ffffff', lineHeight: 1.2, textAlign: 'center', margin: 0 }}>
             Questions <span style={{ color: '#AAFF00' }}>fréquentes</span>
           </h2>
