@@ -43,7 +43,7 @@ function BrowserMockup() {
           <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
         </div>
         <div className="flex-1 mx-2 bg-white/5 rounded px-3 py-0.5 text-[10px] text-muted/40 font-mono">
-          votresite.fr
+          siteasy.io
         </div>
       </div>
       {/* Fake site content */}

@@ -165,14 +165,14 @@ export function FeaturesSection() {
         </div>
 
         {/* Bento — desktop */}
-        <div className="hidden lg:flex lg:flex-col" style={{ gap: 10 }}>
+        <div className="hidden lg:flex lg:flex-col" style={{ gap: 16 }}>
           {/* Row 1 — 58 / 42 */}
-          <div style={{ display: 'grid', gridTemplateColumns: '58fr 42fr', gap: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '58fr 42fr', gap: 16 }}>
             <PerformancesCard />
             <SeoCard />
           </div>
           {/* Row 2 — 42 / 58 */}
-          <div style={{ display: 'grid', gridTemplateColumns: '42fr 58fr', gap: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '42fr 58fr', gap: 16 }}>
             <DesignCard />
             <HostingCard />
           </div>
