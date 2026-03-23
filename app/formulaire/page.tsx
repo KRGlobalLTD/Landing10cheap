@@ -85,10 +85,11 @@ export default function FormulairePage() {
       });
       const payload = (await response.json()) as { error?: string; url?: string };
       if (!response.ok || !payload.url) {
+        console.error('[checkout] Stripe API error:', payload);
         throw new Error(payload.error ?? 'Impossible de créer la session de paiement.');
       }
       setIsSuccess(true);
-      window.location.assign(payload.url);
+      window.location.href = payload.url;
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.');
       setIsLoading(false);
