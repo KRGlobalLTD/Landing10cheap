@@ -254,7 +254,7 @@ export function Etape2({ data, onChange }: Etape2Props) {
             {/* Couleurs secondaires */}
             <div>
               <p className="mb-1 text-sm font-medium text-white">Couleurs secondaires</p>
-              <p className="mb-3 text-xs text-zinc-500">Ajoutez jusqu'à 5 couleurs complémentaires</p>
+              <p className="mb-3 text-xs text-zinc-500">Ajoutez jusqu&apos;à 5 couleurs complémentaires</p>
               <div className="flex items-center gap-3">
                 <input
                   type="color"
