@@ -1,6 +1,7 @@
 'use client';
 
-import { useActionState, useEffect, useMemo, useState } from 'react';
+import { useFormState as useActionState } from 'react-dom';
+import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   INITIAL_SEND_BRIEF_DELIVERY_STATE,
