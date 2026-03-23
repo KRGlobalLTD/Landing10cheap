@@ -20,6 +20,7 @@ export default function FormulairePage() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = loadFormFromStorage();
@@ -72,13 +73,26 @@ export default function FormulairePage() {
 
   async function handleSubmit() {
     setIsLoading(true);
-    await new Promise((r) => setTimeout(r, 1500));
-    console.log('Données formulaire :', data);
-    // TODO: appeler Supabase pour insérer la commande
-    // TODO: appeler /api/checkout pour créer la session Stripe
-    // TODO: router.push(stripeUrl)
-    setIsLoading(false);
-    setIsSuccess(true);
+    setSubmitError(null);
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerEmail: data.email,
+          businessName: data.nomEntreprise || data.typeProjet || '',
+        }),
+      });
+      const payload = (await response.json()) as { error?: string; url?: string };
+      if (!response.ok || !payload.url) {
+        throw new Error(payload.error ?? 'Impossible de créer la session de paiement.');
+      }
+      setIsSuccess(true);
+      window.location.assign(payload.url);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.');
+      setIsLoading(false);
+    }
   }
 
   const variants = {
@@ -178,6 +192,11 @@ export default function FormulairePage() {
               </button>
             ) : (
               <div className="w-full space-y-4">
+                {submitError && (
+                  <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+                    {submitError}
+                  </p>
+                )}
                 <button
                   type="button"
                   onClick={handleSubmit}
