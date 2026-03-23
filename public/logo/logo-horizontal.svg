@@ -1,18 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 113 50" width="113" height="50">
-  <defs>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;display=swap');
-    </style>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 113 42" width="113" height="42">
   <text
-    x="2"
-    y="25"
+    x="1"
+    y="31"
     text-anchor="start"
-    dominant-baseline="central"
-    font-family="Inter, system-ui, -apple-system, sans-serif"
+    font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
     font-weight="700"
-    font-size="32"
-    letter-spacing="-0.02em"
+    font-size="30"
+    letter-spacing="-0.5"
   >
     <tspan fill="#ffffff">sit</tspan><tspan fill="#AAFF00">easy</tspan>
   </text>
