@@ -26,7 +26,7 @@ export function FormProgress({ currentStep, totalSteps, className }: FormProgres
               )}
               style={
                 isActive
-                  ? { backgroundColor: '#AAFF00', color: '#0a0a0a', ringColor: '#AAFF00' }
+                  ? { backgroundColor: '#AAFF00', color: '#0a0a0a' }
                   : isCompleted
                     ? { backgroundColor: 'rgba(170,255,0,0.25)', color: '#AAFF00' }
                     : undefined
