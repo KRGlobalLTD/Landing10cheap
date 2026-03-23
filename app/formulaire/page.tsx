@@ -19,7 +19,7 @@ export default function FormulairePage() {
   const [data, setData] = useState<FormulaireData>(INITIAL_FORM_DATA);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
