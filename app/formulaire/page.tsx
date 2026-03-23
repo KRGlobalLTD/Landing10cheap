@@ -80,7 +80,7 @@ export default function FormulairePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customerEmail: data.email,
-          businessName: data.nomEntreprise || data.typeProjet || '',
+          businessName: data.nomEntreprise || data.typeProjet || undefined,
         }),
       });
       const payload = (await response.json()) as { error?: string; url?: string };
