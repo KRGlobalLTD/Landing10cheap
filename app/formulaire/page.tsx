@@ -76,7 +76,7 @@ export default function FormulairePage() {
     setSubmitError(null);
     try {
       const checkoutPayload = {
-        customerEmail: data.email,
+        customerEmail: data.email || undefined,
         businessName: data.nomEntreprise || data.typeProjet || undefined,
       };
       console.log('PAYLOAD ENVOYÉ:', JSON.stringify(checkoutPayload, null, 2));
