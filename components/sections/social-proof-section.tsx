@@ -36,7 +36,7 @@ function StatCounter({ stat, started, index }: { stat: typeof STATS[0]; started:
 
   const isLeftCol = index % 2 === 0;
   const isTopRow = index < 2;
-  const isLastDesktop = index === STATS.length - 1;
+  // const isLastDesktop = index === STATS.length - 1;
 
   return (
     <div

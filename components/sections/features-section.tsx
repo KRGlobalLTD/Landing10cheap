@@ -107,7 +107,7 @@ function SeoCard() {
   );
 }
 
-function DesignCard({ started }: { started: boolean }) {
+function DesignCard({ started: _started }: { started: boolean }) {
   const colors = ['#c9a96e', '#2d6a4f', '#1d3557', '#e63946', '#9b5de5'];
   const [visible, setVisible] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);

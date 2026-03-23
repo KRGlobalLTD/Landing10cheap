@@ -110,7 +110,7 @@ export function HowItWorksSection() {
               </div>
 
               {/* Text zone — 45% */}
-              <div className="flex flex-col justify-center px-6 py-5" style={{ height: '45%' }}>
+              <div className="flex flex-col justify-start px-6 pt-11 pb-4" style={{ height: '45%' }}>
                 <div className="flex items-center gap-3 mb-2">
                   <div
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold"
