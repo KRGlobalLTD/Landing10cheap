@@ -8,8 +8,18 @@ import { TrackableCta } from '@/components/analytics/trackable-cta';
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(true);
+  const [logoVisible, setLogoVisible] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    // Phase 1 : logo descend
+    const t1 = setTimeout(() => setLogoVisible(true), 200);
+    // Phase 2 : navbar se déplie (après que le logo soit arrivé)
+    const t2 = setTimeout(() => setExpanded(true), 900);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, []);
 
   useEffect(() => {
     function handleScroll() {
@@ -40,15 +50,34 @@ export function Navbar() {
     >
       <div className="w-full max-w-3xl" ref={ref}>
         {/* Barre principale */}
-        <div className="rounded-full border border-white/10 bg-white/5 pl-3 pr-1.5 md:pl-5 md:pr-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+        <div
+          className="rounded-full border border-white/10 bg-white/5 pl-3 pr-1.5 md:pl-5 md:pr-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl"
+          style={{
+            width: expanded ? '100%' : 100,
+            overflow: 'hidden',
+            opacity: logoVisible ? 1 : 0,
+            transform: logoVisible ? 'translateY(0)' : 'translateY(-16px)',
+            transition: 'width 800ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 500ms ease, transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1)',
+          }}
+        >
           <div className="flex h-10 w-full items-center justify-between">
-            <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center">
+            {/* Logo — toujours à gauche, se déplace naturellement avec l'expansion de la pill */}
+            <Link href="/" className="flex items-center shrink-0">
               <Image src="/logo/logo-horizontal.svg" alt="Siteasy" width={72} height={32} priority className="block" />
             </Link>
 
-            {/* Nav desktop */}
-            <nav className="hidden items-center gap-6 md:flex" aria-label="Navigation principale">
+            {/* Nav desktop — grandit depuis la droite du logo */}
+            <nav
+              className="hidden items-center gap-6 md:flex"
+              aria-label="Navigation principale"
+              style={{
+                maxWidth: expanded ? 400 : 0,
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                opacity: expanded ? 1 : 0,
+                transition: 'max-width 800ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 400ms ease 600ms',
+              }}
+            >
               <Link href="/#features" className="text-xs text-muted transition-colors hover:text-foreground">
                 Fonctionnalités
               </Link>
@@ -62,22 +91,34 @@ export function Navbar() {
                 FAQ
               </Link>
             </nav>
-            </div>
 
             {/* CTA desktop */}
-            <TrackableCta
-              href="/formulaire"
-              className="hidden h-7 rounded-full px-3 text-xs md:flex"
-              location="navbar_cta"
+            <div
+              style={{
+                opacity: expanded ? 1 : 0,
+                transition: 'opacity 400ms ease 600ms',
+                flexShrink: 0,
+              }}
             >
-              Commencer
-            </TrackableCta>
+              <TrackableCta
+                href="/formulaire"
+                className="hidden h-7 rounded-full px-3 text-xs md:flex"
+                location="navbar_cta"
+              >
+                Commencer
+              </TrackableCta>
+            </div>
 
             {/* Hamburger mobile */}
             <button
               onClick={() => setOpen(!open)}
               className="flex md:hidden flex-col items-center justify-center gap-[5px] w-9 h-9"
               aria-label="Menu"
+              style={{
+                opacity: expanded ? 1 : 0,
+                transition: 'opacity 400ms ease 600ms',
+                flexShrink: 0,
+              }}
             >
               <span
                 className="block h-[2px] w-5 rounded-full bg-white transition-all duration-200"

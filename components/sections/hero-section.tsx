@@ -99,9 +99,12 @@ export function HeroSection() {
       >
 
         {/* 2. Titre */}
-        <h1 className="font-bold tracking-tighter leading-none mb-6 text-[44px] md:text-[72px]">
+        <h1 className="font-bold tracking-tighter leading-none mb-6 text-[44px] md:text-[82px]">
           <span className="text-white block">Votre site web</span>
-          <span className="block" style={{ color: "#AAFF00" }}>en 30 secondes.</span>
+          <span className="relative block" style={{ color: "#AAFF00" }}>
+            en 30 secondes.
+            <span className="absolute inset-x-0 bottom-0 pointer-events-none" style={{ height: "45%", background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%)" }} />
+          </span>
         </h1>
 
         {/* 3. Sous-titre */}
