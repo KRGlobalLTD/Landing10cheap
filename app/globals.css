@@ -45,6 +45,13 @@
 }
 
 
+/* Letter slide CTA animation */
+.ls-out { display: flex; overflow: hidden; }
+.ls-in  { display: flex; position: absolute; inset: 0; overflow: hidden; }
+.ls-in span { transform: translateY(-1.2em); }
+.letter-btn:hover .ls-out span { transform: translateY(1.2em); }
+.letter-btn:hover .ls-in span  { transform: translateY(0); }
+
 /* Form input focus styles */
 input:focus,
 textarea:focus,

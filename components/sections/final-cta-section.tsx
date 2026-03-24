@@ -1,5 +1,6 @@
 import { Container } from '@/components/ui/container';
 import { Button } from '@/components/ui/button';
+import { LetterSlide } from '@/components/ui/letter-slide';
 
 export function FinalCtaSection() {
   return (
@@ -37,9 +38,9 @@ export function FinalCtaSection() {
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Button
               href="/formulaire"
-              className="h-14 w-full rounded-full px-10 text-base font-semibold sm:w-auto"
+              className="letter-btn relative h-14 w-full rounded-full px-10 text-base font-semibold sm:w-auto"
             >
-              Créer mon site — 14,99€
+              <LetterSlide>Créer mon site — 14,99€</LetterSlide>
             </Button>
           </div>
 

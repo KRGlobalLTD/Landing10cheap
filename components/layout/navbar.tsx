@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { TrackableCta } from '@/components/analytics/trackable-cta';
 import { usePageTransition } from '@/components/ui/page-transition';
+import { LetterSlide } from '@/components/ui/letter-slide';
 
 export function Navbar() {
   const { navigateTo } = usePageTransition();
@@ -104,10 +105,10 @@ export function Navbar() {
             >
               <TrackableCta
                 href="/formulaire"
-                className="hidden h-7 rounded-full px-3 text-xs md:flex"
+                className="letter-btn relative hidden h-7 rounded-full px-3 text-xs md:flex"
                 location="navbar_cta"
               >
-                Commencer
+                <LetterSlide>Commencer</LetterSlide>
               </TrackableCta>
             </div>
 
@@ -157,10 +158,10 @@ export function Navbar() {
             <div className="mt-2 pt-2 border-t border-white/8">
               <button
                 onClick={() => { setOpen(false); navigateTo('/formulaire'); }}
-                className="flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-bold text-zinc-950 transition-opacity hover:opacity-90"
+                className="letter-btn relative flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-bold text-zinc-950 transition-opacity hover:opacity-90"
                 style={{ backgroundColor: '#AAFF00' }}
               >
-                Créer mon site
+                <LetterSlide>Créer mon site</LetterSlide>
               </button>
             </div>
           </div>

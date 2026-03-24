@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { usePageTransition } from "@/components/ui/page-transition";
+import { LetterSlide } from "@/components/ui/letter-slide";
 
 const METIERS = [
   "Plombier",
@@ -174,10 +175,10 @@ export function HeroSection() {
           {/* CTA */}
           <button
             type="submit"
-            className="inline-flex items-center justify-center gap-1.5 font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all shrink-0"
+            className="letter-btn relative inline-flex items-center justify-center gap-1.5 font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all shrink-0"
             style={{ backgroundColor: "#AAFF00", borderRadius: 9999, padding: "14px 20px" }}
           >
-            Créer mon site
+            <LetterSlide>Créer mon site</LetterSlide>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
@@ -239,10 +240,10 @@ export function HeroSection() {
           <div style={{ height: 8 }} />
           <button
             type="submit"
-            className="cta-btn inline-flex items-center justify-center gap-1.5 font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all w-full"
+            className="letter-btn relative inline-flex items-center justify-center gap-1.5 font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all w-full"
             style={{ backgroundColor: "#AAFF00", borderRadius: 10, padding: "14px 0" }}
           >
-            Créer mon site
+            <LetterSlide>Créer mon site</LetterSlide>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>

@@ -13,6 +13,7 @@ function Badge({ label }: { label: string }) {
 }
 
 import React from 'react';
+import { LetterSlide } from '@/components/ui/letter-slide';
 
 const Card = React.forwardRef<HTMLDivElement, { children: React.ReactNode; style?: React.CSSProperties }>(
   function Card({ children, style }, ref) {
@@ -275,10 +276,10 @@ export function FeaturesSection() {
         <div className="flex justify-center mt-12">
           <a
             href="/formulaire"
-            className="inline-flex items-center gap-2 rounded-full font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all"
+            className="letter-btn relative inline-flex items-center gap-2 rounded-full font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all"
             style={{ backgroundColor: LIME, padding: '14px 28px' }}
           >
-            Créer mon site
+            <LetterSlide>Créer mon site</LetterSlide>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </a>
         </div>

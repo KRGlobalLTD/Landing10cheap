@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { usePageTransition } from '@/components/ui/page-transition';
 import { Stepper } from '@/components/formulaire/Stepper';
 import { EtapeProfil } from '@/components/formulaire/EtapeProfil';
@@ -11,11 +11,11 @@ import { Etape2 } from '@/components/formulaire/Etape2';
 import { Etape3 } from '@/components/formulaire/Etape3';
 import { FormulaireData, INITIAL_FORM_DATA } from '@/types/formulaire';
 import { saveFormToStorage, loadFormFromStorage } from '@/hooks/useFormPersist';
+import { LetterSlide } from '@/components/ui/letter-slide';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function FormulairePageInner() {
-  const router = useRouter();
   const { navigateTo } = usePageTransition();
   const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
@@ -187,10 +187,10 @@ function FormulairePageInner() {
                 type="button"
                 onClick={goNext}
                 disabled={!isStepValid(step)}
-                className="group flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-zinc-950 transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+                className="letter-btn group relative flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-zinc-950 transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
                 style={{ backgroundColor: '#AAFF00' }}
               >
-                Continuer
+                <LetterSlide>Continuer</LetterSlide>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </button>
             </div>
@@ -205,13 +205,13 @@ function FormulairePageInner() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={!step3Valid || isLoading}
-                className="group flex items-center justify-center gap-2 rounded-full py-4 text-sm font-semibold text-zinc-950 transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+                className="letter-btn group relative flex items-center justify-center gap-2 rounded-full py-4 text-sm font-semibold text-zinc-950 transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
                 style={{ backgroundColor: '#AAFF00', width: '80%' }}
               >
                 {isLoading ? (
                   <><Loader2 className="h-4 w-4 animate-spin" />Chargement…</>
                 ) : (
-                  <>Passer au paiement — 14,99€<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></>
+                  <><LetterSlide>Passer au paiement — 14,99€</LetterSlide><ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></>
                 )}
               </button>
               <div className="flex flex-col items-center gap-2">

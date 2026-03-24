@@ -1,5 +1,6 @@
 import { Container } from '@/components/ui/container';
 import { Button } from '@/components/ui/button';
+import { LetterSlide } from '@/components/ui/letter-slide';
 
 const INCLUDED = [
   'Site web complet généré automatiquement',
@@ -75,8 +76,8 @@ export function PricingSection() {
                 ))}
               </ul>
 
-              <Button href="/formulaire" className="w-full h-10 rounded-xl text-sm font-semibold">
-                Créer mon site maintenant
+              <Button href="/formulaire" className="letter-btn relative w-full h-10 rounded-xl text-sm font-semibold">
+                <LetterSlide>Créer mon site maintenant</LetterSlide>
               </Button>
 
               <p className="mt-3 text-center text-xs text-muted/50">
