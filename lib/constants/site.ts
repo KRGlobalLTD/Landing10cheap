@@ -3,10 +3,14 @@ import type { FaqItem, FooterLinkGroup, NavItem, OfferItem } from '@/lib/types/s
 export const SITE_CONFIG = {
   name: 'Siteasy',
   description:
-    'Votre landing page simple et professionnelle pour 10 €, en ligne en 30 secondes, hébergement et mise en ligne inclus.',
-  price: '10 €',
+    'Votre landing page simple et professionnelle pour 9,99 €, en ligne en 30 secondes, hébergement et mise en ligne inclus.',
+  price: '9,99 €',
   deliveryDelay: '30 secondes',
-  whatsapp: 'https://wa.me/0000000000'
+  whatsapp:
+    'https://wa.me/33743561304?text=Bonjour%2C%20je%20souhaite%20avoir%20plus%20d%E2%80%99informations%20sur%20vos%20services%20et%20les%20fonctionnalit%C3%A9s%20suppl%C3%A9mentaires.',
+  email: 'contact@krglobalsolutionsltd.com',
+  phone: '+33 7 43 56 13 04',
+  calendly: 'https://calendly.com/krglobalsolutionsltd/30-minute-meeting-clone'
 } as const;
 
 export const MAIN_NAVIGATION: NavItem[] = [

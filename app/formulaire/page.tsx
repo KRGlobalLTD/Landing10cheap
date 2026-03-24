@@ -211,7 +211,7 @@ function FormulairePageInner() {
                 {isLoading ? (
                   <><Loader2 className="h-4 w-4 animate-spin" />Chargement…</>
                 ) : (
-                  <><LetterSlide>Passer au paiement — 14,99€</LetterSlide><ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></>
+                  <><LetterSlide>Passer au paiement — 9,99€</LetterSlide><ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></>
                 )}
               </button>
               <div className="flex flex-col items-center gap-2">

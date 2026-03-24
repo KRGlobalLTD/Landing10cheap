@@ -60,7 +60,7 @@ export function PricingSection() {
               </div>
 
               <div className="mb-1 flex items-end gap-2">
-                <span className="text-5xl font-bold tracking-tight text-foreground">14,99€</span>
+                <span className="text-5xl font-bold tracking-tight text-foreground">9,99€</span>
                 <span className="mb-1.5 text-sm text-muted">TTC · une seule fois</span>
               </div>
               <p className="mb-6 text-sm text-muted">
@@ -82,6 +82,24 @@ export function PricingSection() {
 
               <p className="mt-3 text-center text-xs text-muted/50">
                 Remboursé si non satisfait sous 7 jours
+              </p>
+              <p className="mt-2 text-center text-xs text-muted/40">
+                Besoin de fonctionnalités supplémentaires ?{' '}
+                <a
+                  href="https://wa.me/33743561304?text=Bonjour%2C%20je%20souhaite%20avoir%20plus%20d%E2%80%99informations%20sur%20vos%20services%20et%20les%20fonctionnalit%C3%A9s%20suppl%C3%A9mentaires."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 transition-colors hover:text-muted"
+                >
+                  WhatsApp
+                </a>
+                {' '}ou{' '}
+                <a
+                  href="mailto:contact@krglobalsolutionsltd.com"
+                  className="underline underline-offset-2 transition-colors hover:text-muted"
+                >
+                  email
+                </a>
               </p>
             </div>
           </div>
@@ -125,7 +143,7 @@ export function PricingSection() {
               {/* Price row */}
               <div className="grid grid-cols-3 border-t border-white/8 bg-white/[0.02] px-4 py-2.5">
                 <span className="text-xs font-medium text-foreground">Prix</span>
-                <span className="text-center text-xs font-bold text-foreground">14,99€</span>
+                <span className="text-center text-xs font-bold text-foreground">9,99€</span>
                 <span className="text-center text-xs text-muted">1 500€ – 8 000€</span>
               </div>
             </div>

@@ -1,18 +1,43 @@
 import { PageShell } from '@/components/shared/page-shell';
-import { Card } from '@/components/ui/card';
 
 export default function RemboursementPage() {
   return (
     <PageShell
       title="Politique de remboursement"
-      description="Informations temporaires sur les conditions de remboursement de l’offre."
+      description="KR Global Solutions LTD s'engage à traiter toute demande de remboursement de manière équitable et transparente."
     >
-      <Card className="space-y-3 text-sm text-muted">
-        <p>Le service étant une prestation numérique à exécution rapide, le remboursement n’est pas automatique.</p>
-        <p>Chaque demande est étudiée au cas par cas en fonction de l’avancement de la prestation.</p>
-        <p>Si aucun travail n’a débuté, une annulation peut être envisagée.</p>
-        <p>Pour toute demande, contactez le support via WhatsApp.</p>
-      </Card>
+      <div className="space-y-10 text-sm text-muted-foreground leading-relaxed">
+        <section className="space-y-3">
+          <h2 className="text-base font-semibold text-foreground">Délai</h2>
+          <p>Une demande de remboursement peut être effectuée dans un délai de <strong>7 jours</strong> suivant la date d'achat.</p>
+        </section>
+        <section className="space-y-3">
+          <h2 className="text-base font-semibold text-foreground">Conditions d'éligibilité</h2>
+          <p>Un remboursement est possible uniquement si :</p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>le service n'a pas été livré dans le délai convenu</li>
+            <li>le service fourni est non conforme à la commande passée</li>
+          </ul>
+        </section>
+        <section className="space-y-3">
+          <h2 className="text-base font-semibold text-foreground">Exclusions</h2>
+          <p>Aucun remboursement ne sera accordé si :</p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>le service a été correctement livré</li>
+            <li>le service a été utilisé par le client</li>
+            <li>la demande est effectuée au-delà du délai de 7 jours</li>
+          </ul>
+        </section>
+        <section className="space-y-3">
+          <h2 className="text-base font-semibold text-foreground">Procédure</h2>
+          <p>Toute demande doit être adressée à : <a href="mailto:support@krglobalsolutionsltd.com" className="underline underline-offset-4 hover:text-foreground transition-colors">support@krglobalsolutionsltd.com</a></p>
+          <p>La demande doit inclure le numéro de commande, la date d'achat et le motif détaillé.</p>
+        </section>
+        <section className="space-y-3">
+          <h2 className="text-base font-semibold text-foreground">Traitement</h2>
+          <p>Après validation, le remboursement est effectué via le moyen de paiement initial (Stripe) dans un délai raisonnable.</p>
+        </section>
+      </div>
     </PageShell>
   );
 }

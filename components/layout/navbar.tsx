@@ -93,6 +93,9 @@ export function Navbar() {
               <Link href="/#faq" className="text-xs text-muted transition-colors hover:text-foreground">
                 FAQ
               </Link>
+              <Link href="/#contact" className="text-xs text-muted transition-colors hover:text-foreground">
+                Contact
+              </Link>
             </nav>
 
             {/* CTA desktop */}
@@ -154,6 +157,9 @@ export function Navbar() {
             </Link>
             <Link href="/#faq" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm text-muted hover:text-foreground hover:bg-white/5 transition-colors">
               FAQ
+            </Link>
+            <Link href="/#contact" onClick={() => setOpen(false)} className="rounded-xl px-4 py-3 text-sm text-muted hover:text-foreground hover:bg-white/5 transition-colors">
+              Contact
             </Link>
             <div className="mt-2 pt-2 border-t border-white/8">
               <button

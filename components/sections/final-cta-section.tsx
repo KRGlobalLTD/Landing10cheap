@@ -40,7 +40,7 @@ export function FinalCtaSection() {
               href="/formulaire"
               className="letter-btn relative h-14 w-full rounded-full px-10 text-base font-semibold sm:w-auto"
             >
-              <LetterSlide>Créer mon site — 14,99€</LetterSlide>
+              <LetterSlide>Créer mon site — 9,99€</LetterSlide>
             </Button>
           </div>
 

@@ -11,6 +11,8 @@ import { TestimonialsSection } from '@/components/sections/testimonials-section'
 import { FaqSection } from '@/components/sections/faq-section';
 import { EmailCaptureSection } from '@/components/sections/email-capture-section';
 import { FinalCtaSection } from '@/components/sections/final-cta-section';
+import { ContactSection } from '@/components/sections/contact-section';
+import { WhatsAppButton } from '@/components/ui/whatsapp-button';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 export const metadata: Metadata = {
@@ -59,8 +61,12 @@ export default function HomePage() {
         <ScrollReveal delay={0.05}>
           <FinalCtaSection />
         </ScrollReveal>
+        <ScrollReveal delay={0.05}>
+          <ContactSection />
+        </ScrollReveal>
       </main>
       <Footer />
+      <WhatsAppButton />
     </>
   );
 }
