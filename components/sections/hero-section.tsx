@@ -75,7 +75,7 @@ export function HeroSection() {
   }
 
   return (
-    <div className="relative w-full bg-zinc-950 text-white overflow-hidden font-sans">
+    <div className="relative w-full text-white overflow-hidden font-sans" style={{ background: "radial-gradient(ellipse 50% 60% at 0% 50%, #aaff0018 0%, transparent 70%), radial-gradient(ellipse 50% 60% at 100% 50%, #aaff0018 0%, transparent 70%), #0a0a0a" }}>
       <style>{`
         @keyframes cursor-blink {
           0%, 100% { opacity: 1; }
@@ -103,9 +103,8 @@ export function HeroSection() {
         {/* 2. Titre */}
         <h1 className="font-bold tracking-tighter leading-none mb-6 text-[44px] md:text-[82px]">
           <span className="hero-fadein text-white block" style={{ animationDelay: "0.1s" }}>Votre site web</span>
-          <span className="hero-fadein relative block" style={{ color: "#AAFF00", animationDelay: "0.25s" }}>
+          <span className="hero-fadein block md:text-[100px]" style={{ color: "#AAFF00", animationDelay: "0.25s" }}>
             en 30 secondes.
-            <span className="absolute inset-x-0 bottom-0 pointer-events-none" style={{ height: "45%", background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%)" }} />
           </span>
         </h1>
 
