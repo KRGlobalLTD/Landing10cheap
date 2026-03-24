@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { usePageTransition } from '@/components/ui/page-transition';
 import { Stepper } from '@/components/formulaire/Stepper';
 import { EtapeProfil } from '@/components/formulaire/EtapeProfil';
 import { Etape2 } from '@/components/formulaire/Etape2';
@@ -15,6 +16,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function FormulairePageInner() {
   const router = useRouter();
+  const { navigateTo } = usePageTransition();
   const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
@@ -68,8 +70,8 @@ function FormulairePageInner() {
     return step3Valid;
   }
 
-  function goNext() { setDirection(1); setStep((s) => s + 1); }
-  function goBack() { setDirection(-1); setStep((s) => s - 1); }
+  function goNext() { setDirection(1); setStep((s) => s + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function goBack() { setDirection(-1); setStep((s) => s - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
   async function handleSubmit() {
     setIsLoading(true);
@@ -132,11 +134,11 @@ function FormulairePageInner() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <button
-        onClick={() => router.back()}
+        onClick={() => navigateTo('/')}
         className="fixed left-6 top-6 z-50 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm text-zinc-400 backdrop-blur-sm transition-all hover:border-white/25 hover:text-white"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
-        Retour
+        Retour à l&apos;accueil
       </button>
       <div className="mx-auto max-w-xl px-4 py-12">
 
@@ -173,15 +175,14 @@ function FormulairePageInner() {
             </motion.div>
           </AnimatePresence>
 
-          <div className={`mt-8 flex ${step > 1 ? 'justify-between' : 'justify-end'} items-center gap-4`}>
-            {step > 1 && (
-              <button type="button" onClick={goBack} className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
-                <ArrowLeft className="h-4 w-4" />
-                Retour
-              </button>
-            )}
-
-            {step < 3 ? (
+          {step < 3 ? (
+            <div className={`mt-8 flex ${step > 1 ? 'justify-between' : 'justify-end'} items-center gap-4`}>
+              {step > 1 && (
+                <button type="button" onClick={goBack} className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
+                  <ArrowLeft className="h-4 w-4" />
+                  Page précédente
+                </button>
+              )}
               <button
                 type="button"
                 onClick={goNext}
@@ -192,36 +193,45 @@ function FormulairePageInner() {
                 Continuer
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </button>
-            ) : (
-              <div className="w-full space-y-4">
-                {submitError && (
-                  <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-                    {submitError}
-                  </p>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-col items-center gap-4">
+              {submitError && (
+                <p className="w-full rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+                  {submitError}
+                </p>
+              )}
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={!step3Valid || isLoading}
+                className="group flex items-center justify-center gap-2 rounded-full py-4 text-sm font-semibold text-zinc-950 transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{ backgroundColor: '#AAFF00', width: '80%' }}
+              >
+                {isLoading ? (
+                  <><Loader2 className="h-4 w-4 animate-spin" />Chargement…</>
+                ) : (
+                  <>Passer au paiement — 14,99€<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></>
                 )}
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={!step3Valid || isLoading}
-                  className="group flex w-full items-center justify-center gap-2 rounded-full py-4 text-sm font-semibold text-zinc-950 transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
-                  style={{ backgroundColor: '#AAFF00' }}
-                >
-                  {isLoading ? (
-                    <><Loader2 className="h-4 w-4 animate-spin" />Chargement…</>
-                  ) : (
-                    <>Passer au paiement — 14,99€<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></>
-                  )}
-                </button>
-                <div className="flex flex-wrap justify-center gap-4">
-                  {['Remboursé sous 7 jours', 'Hébergement inclus', 'Paiement sécurisé'].map((badge) => (
-                    <span key={badge} className="flex items-center gap-1 text-xs text-zinc-500">
+              </button>
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex gap-4">
+                  {['Remboursé sous 7 jours', 'Hébergement inclus'].map((badge) => (
+                    <span key={badge} className="flex items-center gap-1.5 text-xs text-zinc-500">
                       <span style={{ color: '#AAFF00' }}>✓</span>{badge}
                     </span>
                   ))}
                 </div>
+                <span className="flex items-center gap-1.5 text-xs text-zinc-500">
+                  <span style={{ color: '#AAFF00' }}>✓</span>Paiement sécurisé
+                </span>
               </div>
-            )}
-          </div>
+              <button type="button" onClick={goBack} className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors">
+                <ArrowLeft className="h-4 w-4" />
+                Page précédente
+              </button>
+            </div>
+          )}
         </div>
 
         <p className="mt-6 text-center text-xs text-zinc-700">

@@ -239,7 +239,7 @@ export function HeroSection() {
           <div style={{ height: 8 }} />
           <button
             type="submit"
-            className="inline-flex items-center justify-center gap-1.5 font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all w-full"
+            className="cta-btn inline-flex items-center justify-center gap-1.5 font-bold text-sm text-zinc-950 hover:opacity-90 active:scale-[0.98] transition-all w-full"
             style={{ backgroundColor: "#AAFF00", borderRadius: 10, padding: "14px 0" }}
           >
             Créer mon site

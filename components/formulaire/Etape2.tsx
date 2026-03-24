@@ -4,12 +4,18 @@ import { useRef, useState } from 'react';
 import { FormulaireData } from '@/types/formulaire';
 import { CardSelectable } from './CardSelectable';
 
-const OBJECTIFS = [
-  { id: 'appeler', icon: '📞', label: 'Vous appeler' },
-  { id: 'contacter', icon: '✉️', label: 'Vous contacter' },
-  { id: 'rdv', icon: '📅', label: 'Prendre rendez-vous' },
-  { id: 'visiter', icon: '📍', label: 'Visiter votre boutique' },
-  { id: 'acheter', icon: '🛒', label: 'Acheter en ligne' },
+const OBJECTIFS_PRO = [
+  { id: 'contacter', icon: '✉️', label: 'Être contacté', sub: 'Formulaire, email, téléphone' },
+  { id: 'acheter', icon: '🛒', label: 'Vendre en ligne', sub: 'Boutique, e-commerce' },
+  { id: 'visiter', icon: '📍', label: 'Recevoir des clients', sub: 'Restaurant, commerce, salon' },
+  { id: 'rdv', icon: '📅', label: 'Prendre des rendez-vous', sub: 'Médecin, coach, coiffeur' },
+];
+
+const OBJECTIFS_PART = [
+  { id: 'projet', icon: '🚀', label: 'Présenter mon projet', sub: 'Landing page, side project' },
+  { id: 'passion', icon: '📝', label: 'Partager ma passion', sub: 'Blog, vlog, hobby' },
+  { id: 'evenement', icon: '💍', label: 'Célébrer un événement', sub: 'Mariage, anniversaire' },
+  { id: 'asso', icon: '🤝', label: 'Représenter mon asso', sub: 'Club, association' },
 ];
 
 const PALETTES = [
@@ -26,8 +32,10 @@ const PALETTES = [
 const TONS = [
   { id: 'professionnel', label: 'Professionnel', desc: 'Sobre, rassurant' },
   { id: 'chaleureux', label: 'Chaleureux', desc: 'Accueillant, humain' },
-  { id: 'moderne', label: 'Moderne', desc: 'Épuré, tendance' },
-  { id: 'minimaliste', label: 'Minimaliste', desc: 'Simple, efficace' },
+  { id: 'moderne', label: 'Épuré / Moderne', desc: 'Minimaliste, tendance' },
+  { id: 'luxe', label: 'Luxe / Premium', desc: 'Élégant, haut de gamme' },
+  { id: 'dynamique', label: 'Dynamique / Sportif', desc: 'Énergique, bold' },
+  { id: 'street', label: 'Street / Urban', desc: 'Brut, authentique' },
 ];
 
 interface Etape2Props {
@@ -54,10 +62,13 @@ export function Etape2({ data, onChange }: Etape2Props) {
       {/* Objectif visiteur */}
       <div>
         <label className="mb-3 block text-xs font-medium uppercase tracking-wider text-zinc-400">
-          Que voulez-vous que vos visiteurs fassent ? <span style={{ color: '#AAFF00' }}>*</span>
+          {data.typeClient === 'particulier'
+            ? <>Quel est votre objectif principal ? <span style={{ color: '#AAFF00' }}>*</span></>
+            : <>Que voulez-vous que vos visiteurs fassent ? <span style={{ color: '#AAFF00' }}>*</span></>
+          }
         </label>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {OBJECTIFS.map((obj) => (
+          {(data.typeClient === 'particulier' ? OBJECTIFS_PART : OBJECTIFS_PRO).map((obj) => (
             <CardSelectable
               key={obj.id}
               selected={data.objectifVisiteur === obj.id}
@@ -65,7 +76,10 @@ export function Etape2({ data, onChange }: Etape2Props) {
             >
               <div className="flex items-center gap-3">
                 <span className="text-xl">{obj.icon}</span>
-                <span className="text-sm font-medium text-white">{obj.label}</span>
+                <div>
+                  <p className="text-sm font-medium text-white">{obj.label}</p>
+                  <p className="mt-0.5 text-xs" style={{ color: '#6b7280' }}>{obj.sub}</p>
+                </div>
               </div>
             </CardSelectable>
           ))}
@@ -317,7 +331,7 @@ export function Etape2({ data, onChange }: Etape2Props) {
         <label className="mb-3 block text-xs font-medium uppercase tracking-wider text-zinc-400">
           Ton du site <span style={{ color: '#AAFF00' }}>*</span>
         </label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {TONS.map((ton) => (
             <CardSelectable
               key={ton.id}

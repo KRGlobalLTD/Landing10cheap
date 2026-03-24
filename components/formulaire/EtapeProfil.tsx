@@ -19,11 +19,10 @@ const PROFILS = [
 ];
 
 const TYPES_PROJET = [
-  { id: 'portfolio', icon: '🎨', label: 'Portfolio personnel' },
-  { id: 'blog', icon: '✍️', label: 'Blog / Vlog' },
-  { id: 'evenement', icon: '💍', label: 'Mariage / Événement' },
-  { id: 'asso', icon: '🤝', label: 'Club / Association' },
-  { id: 'autre', icon: '💡', label: 'Autre projet' },
+  { id: 'projet', icon: '🚀', label: 'Présenter mon projet', sub: 'Landing page, side project' },
+  { id: 'passion', icon: '📝', label: 'Partager ma passion', sub: 'Blog, vlog, hobby' },
+  { id: 'evenement', icon: '💍', label: 'Célébrer un événement', sub: 'Mariage, anniversaire' },
+  { id: 'asso', icon: '🤝', label: 'Représenter mon asso', sub: 'Club, association' },
 ];
 
 const VISIBILITE_OPTIONS = [
@@ -115,19 +114,7 @@ export function EtapeProfil({ data, onChange }: EtapeProfilProps) {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-zinc-400">
-                    Ville <span style={{ color: '#AAFF00' }}>*</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Ex : Paris, Lyon…"
-                    value={data.ville}
-                    onChange={(e) => onChange('ville', e.target.value)}
-                    className={inputClass}
-                  />
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-zinc-400">
                     Téléphone <span className="text-zinc-600 normal-case font-normal">(optionnel)</span>
@@ -140,6 +127,18 @@ export function EtapeProfil({ data, onChange }: EtapeProfilProps) {
                     className={inputClass}
                   />
                   <p className="mt-1.5 text-xs text-zinc-600">Votre numéro sera utilisé pour que vos clients vous contactent.</p>
+                </div>
+                <div>
+                  <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-zinc-400">
+                    Ville <span style={{ color: '#AAFF00' }}>*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Ex : Paris, Lyon…"
+                    value={data.ville}
+                    onChange={(e) => onChange('ville', e.target.value)}
+                    className={inputClass}
+                  />
                 </div>
               </div>
 
@@ -202,14 +201,17 @@ export function EtapeProfil({ data, onChange }: EtapeProfilProps) {
                     >
                       <div className="flex items-center gap-3">
                         <span className="text-xl">{t.icon}</span>
-                        <span className="text-sm font-medium text-white">{t.label}</span>
+                        <div>
+                          <p className="text-sm font-medium text-white">{t.label}</p>
+                          <p className="mt-0.5 text-xs" style={{ color: '#6b7280' }}>{t.sub}</p>
+                        </div>
                       </div>
                     </CardSelectable>
                   ))}
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-zinc-400">
                     Ville <span className="text-zinc-600 normal-case font-normal">(optionnel)</span>
