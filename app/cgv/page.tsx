@@ -22,7 +22,7 @@ export default function CgvPage() {
         </section>
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Commande</h2>
-          <p>Toute commande implique l'acceptation sans réserve des présentes conditions. La commande est confirmée dès réception du paiement.</p>
+          <p>Toute commande implique l&apos;acceptation sans réserve des présentes conditions. La commande est confirmée dès réception du paiement.</p>
         </section>
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Prix</h2>
@@ -38,11 +38,11 @@ export default function CgvPage() {
         </section>
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Responsabilité</h2>
-          <p>KR Global Solutions LTD ne peut être tenue responsable d'une mauvaise utilisation des services, de pertes indirectes ou de problèmes liés à des services tiers.</p>
+          <p>KR Global Solutions LTD ne peut être tenue responsable d&apos;une mauvaise utilisation des services, de pertes indirectes ou de problèmes liés à des services tiers.</p>
         </section>
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Modification des conditions</h2>
-          <p>KR Global Solutions LTD se réserve le droit de modifier les présentes conditions à tout moment. Les nouvelles conditions s'appliquent dès leur publication sur le site.</p>
+          <p>KR Global Solutions LTD se réserve le droit de modifier les présentes conditions à tout moment. Les nouvelles conditions s&apos;appliquent dès leur publication sur le site.</p>
         </section>
       </div>
     </PageShell>

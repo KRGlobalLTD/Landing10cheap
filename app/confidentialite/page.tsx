@@ -18,7 +18,7 @@ export default function ConfidentialitePage() {
         </section>
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Utilisation des données</h2>
-          <p>Les données collectées sont utilisées pour fournir et améliorer les services, traiter les paiements, assurer le support client et améliorer l'expérience utilisateur.</p>
+          <p>Les données collectées sont utilisées pour fournir et améliorer les services, traiter les paiements, assurer le support client et améliorer l&apos;expérience utilisateur.</p>
         </section>
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Outils et services tiers</h2>
@@ -38,7 +38,7 @@ export default function ConfidentialitePage() {
         </section>
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Droits des utilisateurs</h2>
-          <p>Conformément aux réglementations en vigueur, vous disposez des droits d'accès, de rectification et de suppression de vos données.</p>
+          <p>Conformément aux réglementations en vigueur, vous disposez des droits d&apos;accès, de rectification et de suppression de vos données.</p>
           <p>Toute demande peut être envoyée à : <a href="mailto:support@krglobalsolutionsltd.com" className="underline underline-offset-4 hover:text-foreground transition-colors">support@krglobalsolutionsltd.com</a></p>
         </section>
       </div>

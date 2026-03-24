@@ -19,14 +19,14 @@ export default function MentionsLegalesPage() {
         </section>
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Propriété intellectuelle</h2>
-          <p>L'ensemble du contenu présent sur ce site est protégé par les lois en vigueur sur la propriété intellectuelle. Toute reproduction sans autorisation préalable écrite de KR Global Solutions LTD est strictement interdite.</p>
+          <p>L&apos;ensemble du contenu présent sur ce site est protégé par les lois en vigueur sur la propriété intellectuelle. Toute reproduction sans autorisation préalable écrite de KR Global Solutions LTD est strictement interdite.</p>
         </section>
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Responsabilité</h2>
-          <p>KR Global Solutions LTD s'efforce d'assurer l'exactitude des informations diffusées sur le site mais ne peut être tenue responsable :</p>
+          <p>KR Global Solutions LTD s&apos;efforce d&apos;assurer l&apos;exactitude des informations diffusées sur le site mais ne peut être tenue responsable :</p>
           <ul className="list-disc pl-5 space-y-1">
-            <li>des dommages liés à l'utilisation du site</li>
-            <li>d'une indisponibilité temporaire du service</li>
+            <li>des dommages liés à l&apos;utilisation du site</li>
+            <li>d&apos;une indisponibilité temporaire du service</li>
             <li>de problèmes techniques indépendants de sa volonté</li>
           </ul>
         </section>

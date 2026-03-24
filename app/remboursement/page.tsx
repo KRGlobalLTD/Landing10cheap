@@ -9,13 +9,13 @@ export default function RemboursementPage() {
       <div className="space-y-10 text-sm text-muted-foreground leading-relaxed">
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Délai</h2>
-          <p>Une demande de remboursement peut être effectuée dans un délai de <strong>7 jours</strong> suivant la date d'achat.</p>
+          <p>Une demande de remboursement peut être effectuée dans un délai de <strong>7 jours</strong> suivant la date d&apos;achat.</p>
         </section>
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Conditions d'éligibilité</h2>
           <p>Un remboursement est possible uniquement si :</p>
           <ul className="list-disc pl-5 space-y-1">
-            <li>le service n'a pas été livré dans le délai convenu</li>
+            <li>le service n&apos;a pas été livré dans le délai convenu</li>
             <li>le service fourni est non conforme à la commande passée</li>
           </ul>
         </section>
@@ -31,7 +31,7 @@ export default function RemboursementPage() {
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Procédure</h2>
           <p>Toute demande doit être adressée à : <a href="mailto:support@krglobalsolutionsltd.com" className="underline underline-offset-4 hover:text-foreground transition-colors">support@krglobalsolutionsltd.com</a></p>
-          <p>La demande doit inclure le numéro de commande, la date d'achat et le motif détaillé.</p>
+          <p>La demande doit inclure le numéro de commande, la date d&apos;achat et le motif détaillé.</p>
         </section>
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Traitement</h2>
