@@ -12,7 +12,7 @@ export default function RemboursementPage() {
           <p>Une demande de remboursement peut être effectuée dans un délai de <strong>7 jours</strong> suivant la date d&apos;achat.</p>
         </section>
         <section className="space-y-3">
-          <h2 className="text-base font-semibold text-foreground">Conditions d'éligibilité</h2>
+          <h2 className="text-base font-semibold text-foreground">Conditions d&apos;éligibilité</h2>
           <p>Un remboursement est possible uniquement si :</p>
           <ul className="list-disc pl-5 space-y-1">
             <li>le service n&apos;a pas été livré dans le délai convenu</li>
