@@ -102,13 +102,18 @@ function buildConfirmationHtml(name: string) {
 
 export async function POST(request: Request) {
   const ip = getClientIp(request);
-  const { success } = await ratelimit.limit(ip);
 
-  if (!success) {
-    return NextResponse.json(
-      { error: 'Trop de requêtes. Réessaie dans une minute.' },
-      { status: 429, headers: { 'Retry-After': '60' } }
-    );
+  try {
+    const { success } = await ratelimit.limit(ip);
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Trop de requêtes. Réessaie dans une minute.' },
+        { status: 429, headers: { 'Retry-After': '60' } }
+      );
+    }
+  } catch (rateLimitError) {
+    // Fail open : si Redis est indisponible, on ne bloque pas les utilisateurs légitimes
+    console.error('[contact] Rate limit check failed, proceeding.', rateLimitError);
   }
 
   try {
