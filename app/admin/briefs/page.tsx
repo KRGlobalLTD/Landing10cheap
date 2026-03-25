@@ -5,6 +5,8 @@ import { Container } from '@/components/ui/container';
 import { Section } from '@/components/ui/section';
 import { getAdminBriefs } from '@/lib/admin/get-admin-briefs';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminBriefsPage() {
   // NOTE: Route interne non protégée pour l'instant.
   // Ajouter une vraie protection (auth middleware / ACL) avant une mise en production publique.
