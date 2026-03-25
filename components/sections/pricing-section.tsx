@@ -117,7 +117,7 @@ export function PricingSection() {
               {/* Header */}
               <div className="grid grid-cols-3 border-b border-white/8 bg-white/[0.02] px-4 py-2.5">
                 <span className="text-xs font-medium text-muted" />
-                <span className="text-center text-xs font-semibold text-foreground">Avec Siteasy</span>
+                <span className="text-center text-xs font-semibold text-foreground">Avec nous</span>
                 <span className="text-center text-xs text-muted">Agence classique</span>
               </div>
 

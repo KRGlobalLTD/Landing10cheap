@@ -42,7 +42,7 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
   const amount = order.amountTotal > 0 ? `${(order.amountTotal / 100).toFixed(2)} ${(order.currency || 'eur').toUpperCase()}` : 'Non renseigné';
   const warnings = payload.warnings;
 
-  const subject = 'Nouvelle commande payée — Siteasy';
+  const subject = 'Nouvelle commande payée — KR Global Solutions LTD';
 
   const html = `
   <div style="font-family:Arial,Helvetica,sans-serif;color:#0f172a;line-height:1.5;max-width:760px;margin:0 auto;padding:16px;">

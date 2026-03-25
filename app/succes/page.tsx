@@ -5,13 +5,13 @@ import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
   title: 'Paiement reçu',
-  description: 'Confirmation de paiement réussie pour votre commande Siteasy.',
+  description: 'Confirmation de paiement réussie — KR Global Solutions LTD.',
   alternates: {
     canonical: '/succes'
   },
   openGraph: {
     title: 'Paiement reçu',
-    description: 'Confirmation de paiement réussie pour votre commande Siteasy.',
+    description: 'Confirmation de paiement réussie — KR Global Solutions LTD.',
     url: '/succes'
   }
 };
@@ -20,7 +20,7 @@ export default function SuccesPage() {
   return (
     <PageShell
       title="Paiement reçu"
-      description="Merci pour votre commande Siteasy. Nous confirmons le paiement côté serveur."
+      description="Merci pour votre commande. Nous confirmons le paiement côté serveur."
     >
       <Card className="space-y-4 bg-zinc-950 text-zinc-100">
         <p className="text-sm text-zinc-300">

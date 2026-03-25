@@ -43,7 +43,7 @@ export function buildCustomerDeliveryEmailTemplate(payload: CustomerDeliveryEmai
   const siteUrl = normalize(delivery.siteUrl);
   const supportEmail = normalize(delivery.supportEmail) || normalize(payload.support.email);
   const whatsappUrl = normalize(delivery.supportWhatsapp) || normalize(payload.support.whatsapp);
-  const calendlyUrl = 'https://calendly.com/krglobalsolutionsltd/30-minute-meeting-clone';
+  const calendlyUrl = process.env.CUSTOMER_SUPPORT_CALENDLY || 'https://calendly.com/krglobalsolutionsltd/30-minute-meeting-clone';
   const customMessage = normalize(delivery.customMessage);
   const appUrl = normalize(process.env.NEXT_PUBLIC_APP_URL, 'https://krglobalsolutionsltd.com');
 

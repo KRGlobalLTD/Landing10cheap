@@ -1,7 +1,7 @@
 import type { FaqItem, FooterLinkGroup, NavItem, OfferItem } from '@/lib/types/site';
 
 export const SITE_CONFIG = {
-  name: 'Siteasy',
+  name: 'KR Global Solutions LTD',
   description:
     'Votre landing page simple et professionnelle pour 9,99 €, en ligne en 30 secondes, hébergement et mise en ligne inclus.',
   price: '9,99 €',

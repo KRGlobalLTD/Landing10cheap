@@ -66,7 +66,7 @@ export function Navbar() {
           <div className="flex h-10 w-full items-center justify-between">
             {/* Logo — toujours à gauche, se déplace naturellement avec l'expansion de la pill */}
             <Link href="/" className="flex items-center shrink-0">
-              <Image src="/logo/logo-horizontal.svg" alt="Siteasy" width={72} height={32} priority className="block" />
+              <Image src="/logo/logo-horizontal.svg" alt="KR Global Solutions LTD" width={72} height={32} priority className="block" />
             </Link>
 
             {/* Nav desktop — grandit depuis la droite du logo */}

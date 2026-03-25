@@ -1,7 +1,7 @@
 export const SITEASY_PAYMENT = {
   amountInCents: 999,
   currency: 'eur',
-  name: 'Siteasy — Site web',
+  name: 'KR Global Solutions LTD — Site web',
   description: 'Site web en ligne en 30 secondes avec hébergement inclus'
 } as const;
 

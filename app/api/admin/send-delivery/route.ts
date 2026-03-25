@@ -47,7 +47,7 @@ function buildDeliveryHtml(params: {
 }) {
   const { customerName, siteUrl, orderNumber, appUrl } = params;
   const firstName = customerName.split(/\s+/)[0] || customerName;
-  const calendlyUrl = 'https://calendly.com/krglobalsolutionsltd/30-minute-meeting-clone';
+  const calendlyUrl = process.env.CUSTOMER_SUPPORT_CALENDLY || 'https://calendly.com/krglobalsolutionsltd/30-minute-meeting-clone';
   const whatsappUrl = process.env.CUSTOMER_SUPPORT_WHATSAPP || 'https://wa.me/33743561304';
 
   return `<!DOCTYPE html>

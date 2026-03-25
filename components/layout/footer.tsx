@@ -10,7 +10,7 @@ export function Footer() {
       <Container>
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4 items-start">
           <div className="space-y-3">
-            <Image src="/logo/logo-horizontal.svg" alt="Siteasy" width={100} height={25} />
+            <Image src="/logo/logo-horizontal.svg" alt="KR Global Solutions LTD" width={100} height={25} />
             <p className="text-sm leading-relaxed text-muted">{SITE_CONFIG.description}</p>
             <p className="text-xs text-muted/40">
               © {new Date().getFullYear()} {SITE_CONFIG.name}. Tous droits réservés.

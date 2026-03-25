@@ -8,7 +8,7 @@ import { PageTransitionProvider } from '@/components/ui/page-transition';
 
 const geist = Inter({subsets:['latin'],variable:'--font-sans'});
 
-const siteUrl = 'https://landing-express-10e.vercel.app';
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://krglobalsolutionsltd.com';
 const defaultOgImage = '/icon.svg';
 
 export const metadata: Metadata = {

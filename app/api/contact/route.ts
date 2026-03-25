@@ -77,7 +77,7 @@ function buildConfirmationHtml(name: string) {
   </p>
   <p style="color:#475569;font-size:15px;">
     En attendant, n&apos;hésitez pas à nous contacter directement sur WhatsApp pour une réponse rapide :
-    <a href="https://wa.me/33743561304" style="color:#0f172a;font-weight:700;">+33 7 43 56 13 04</a>
+    <a href="${process.env.CUSTOMER_SUPPORT_WHATSAPP || 'https://wa.me/33743561304'}" style="color:#0f172a;font-weight:700;">+33 7 43 56 13 04</a>
   </p>
   <p style="margin:20px 0 0;color:#94a3b8;font-size:13px;">KR Global Solutions LTD</p>
 </div>`;
