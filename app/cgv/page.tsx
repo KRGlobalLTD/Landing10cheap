@@ -1,4 +1,11 @@
+import type { Metadata } from 'next';
 import { PageShell } from '@/components/shared/page-shell';
+
+export const metadata: Metadata = {
+  title: 'Conditions Générales de Vente',
+  description: 'Conditions générales de vente des services digitaux proposés par KR Global Solutions LTD.',
+  alternates: { canonical: '/cgv' },
+};
 
 export default function CgvPage() {
   return (
@@ -6,7 +13,7 @@ export default function CgvPage() {
       title="Conditions Générales de Vente"
       description="Les présentes conditions régissent les ventes de services digitaux proposés par KR Global Solutions LTD."
     >
-      <div className="space-y-10 text-sm text-muted-foreground leading-relaxed">
+      <div className="space-y-10 text-sm text-muted leading-relaxed">
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Objet</h2>
           <p>Les présentes conditions définissent les droits et obligations de KR Global Solutions LTD et de ses clients dans le cadre de la vente de services digitaux.</p>

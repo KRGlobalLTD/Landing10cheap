@@ -1,4 +1,11 @@
+import type { Metadata } from 'next';
 import { PageShell } from '@/components/shared/page-shell';
+
+export const metadata: Metadata = {
+  title: 'Mentions légales',
+  description: 'Informations légales relatives à l\'édition et à l\'exploitation du site KR Global Solutions LTD.',
+  alternates: { canonical: '/mentions-legales' },
+};
 
 export default function MentionsLegalesPage() {
   return (
@@ -6,7 +13,7 @@ export default function MentionsLegalesPage() {
       title="Mentions légales"
       description="Informations légales relatives à l'édition et à l'exploitation du présent site web."
     >
-      <div className="space-y-10 text-sm text-muted-foreground leading-relaxed">
+      <div className="space-y-10 text-sm text-muted leading-relaxed">
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Éditeur du site</h2>
           <p>Le présent site est édité par la société <strong>KR Global Solutions LTD</strong>, société enregistrée au Royaume-Uni.</p>

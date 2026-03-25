@@ -23,7 +23,6 @@ function FormulairePageInner() {
   const [data, setData] = useState<FormulaireData>(INITIAL_FORM_DATA);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -81,7 +80,6 @@ function FormulairePageInner() {
         customerEmail: data.email || undefined,
         businessName: data.nomEntreprise || data.typeProjet || undefined,
       };
-      console.log('PAYLOAD ENVOYÉ:', JSON.stringify(checkoutPayload, null, 2));
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -110,26 +108,6 @@ function FormulairePageInner() {
     2: { title: 'Votre site', sub: 'Comment voulez-vous apparaître en ligne ?' },
     3: { title: 'Vos coordonnées', sub: 'Où vous envoyer votre site ?' },
   };
-
-  if (isSuccess) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="text-center space-y-4"
-        >
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(170,255,0,0.15)' }}>
-            <svg className="h-8 w-8" viewBox="0 0 32 32" fill="none">
-              <path d="M6 16l7 7 13-13" stroke="#AAFF00" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-white">Commande enregistrée !</h2>
-          <p className="text-zinc-400">Redirection vers le paiement…</p>
-        </motion.div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">

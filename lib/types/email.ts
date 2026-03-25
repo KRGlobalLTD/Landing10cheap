@@ -36,7 +36,7 @@ export type InternalOrderEmailPayload = {
 };
 
 export type CustomerOrderConfirmationEmailPayload = {
-  brief: BriefRecord;
+  brief?: BriefRecord | null;
   order: OrderRecord;
   confirmedAt: string;
   customerEmail: string;

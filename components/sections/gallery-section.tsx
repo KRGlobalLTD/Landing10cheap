@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Container } from '@/components/ui/container';
 
 const SITES = [
@@ -73,11 +74,14 @@ export function GallerySection() {
               {/* Mini site preview */}
               <div className="relative overflow-hidden">
                 {site.image ? (
-                  <img
-                    src={site.image}
-                    alt={site.name}
-                    className="h-52 w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                  />
+                  <div className="relative h-52 w-full">
+                    <Image
+                      src={site.image}
+                      alt={site.name}
+                      fill
+                      className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
                 ) : (
                   <div className="px-4 pb-4 pt-4">
                     <div

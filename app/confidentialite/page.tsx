@@ -1,4 +1,11 @@
+import type { Metadata } from 'next';
 import { PageShell } from '@/components/shared/page-shell';
+
+export const metadata: Metadata = {
+  title: 'Politique de confidentialité',
+  description: 'Comment KR Global Solutions LTD collecte, utilise et protège vos données personnelles.',
+  alternates: { canonical: '/confidentialite' },
+};
 
 export default function ConfidentialitePage() {
   return (
@@ -6,7 +13,7 @@ export default function ConfidentialitePage() {
       title="Politique de confidentialité"
       description="KR Global Solutions LTD accorde une importance particulière à la protection des données personnelles des utilisateurs."
     >
-      <div className="space-y-10 text-sm text-muted-foreground leading-relaxed">
+      <div className="space-y-10 text-sm text-muted leading-relaxed">
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Données collectées</h2>
           <p>Nous pouvons collecter les informations suivantes :</p>

@@ -9,7 +9,6 @@ import { PageTransitionProvider } from '@/components/ui/page-transition';
 const geist = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://krglobalsolutionsltd.com';
-const defaultOgImage = '/icon.svg';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -26,14 +25,6 @@ export const metadata: Metadata = {
     description: SITE_CONFIG.description,
     url: siteUrl,
     siteName: SITE_CONFIG.name,
-    images: [
-      {
-        url: defaultOgImage,
-        width: 512,
-        height: 512,
-        alt: `${SITE_CONFIG.name} - aperçu`
-      }
-    ],
     type: 'website',
     locale: 'fr_FR'
   },
@@ -41,7 +32,6 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SITE_CONFIG.name,
     description: SITE_CONFIG.description,
-    images: [defaultOgImage]
   },
   icons: {
     icon: '/icon.svg',

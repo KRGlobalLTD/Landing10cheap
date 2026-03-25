@@ -25,8 +25,8 @@ function getCustomerSupportChannels() {
   };
 }
 
-function resolveCustomerEmail(brief: BriefRecord, order: OrderRecord) {
-  const briefEmail = brief.customer.email?.trim();
+function resolveCustomerEmail(brief: BriefRecord | null | undefined, order: OrderRecord) {
+  const briefEmail = brief?.customer.email?.trim();
 
   if (briefEmail) {
     return briefEmail;
@@ -41,7 +41,7 @@ function resolveCustomerEmail(brief: BriefRecord, order: OrderRecord) {
   return null;
 }
 
-export async function sendCustomerOrderConfirmationEmail(params: { brief: BriefRecord; order: OrderRecord }) {
+export async function sendCustomerOrderConfirmationEmail(params: { brief?: BriefRecord | null; order: OrderRecord }) {
   const { brief, order } = params;
 
   const customerEmail = resolveCustomerEmail(brief, order);
@@ -56,7 +56,7 @@ export async function sendCustomerOrderConfirmationEmail(params: { brief: BriefR
   const template = buildCustomerOrderConfirmationEmailTemplate({
     brief,
     order,
-    confirmedAt: brief.payment.paidAt || order.paidAt || new Date().toISOString(),
+    confirmedAt: brief?.payment.paidAt || order.paidAt || new Date().toISOString(),
     customerEmail,
     orderNumber: order.orderNumber ?? order.stripeSessionId.slice(-8).toUpperCase(),
     support,

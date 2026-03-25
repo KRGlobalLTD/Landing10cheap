@@ -137,7 +137,12 @@ async function maybeSendInternalOrderEmail(params: { order: OrderRecord; brief: 
 async function maybeSendCustomerOrderConfirmationEmail(params: { order: OrderRecord; brief: BriefRecord | null }) {
   const { order, brief } = params;
 
-  if (!brief || order.status !== 'paid') {
+  if (order.status !== 'paid') {
+    return;
+  }
+
+  if (!order.customerEmail) {
+    console.warn(`[email] No customer email for session ${order.stripeSessionId}, skipping confirmation.`);
     return;
   }
 

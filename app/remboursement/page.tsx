@@ -1,4 +1,11 @@
+import type { Metadata } from 'next';
 import { PageShell } from '@/components/shared/page-shell';
+
+export const metadata: Metadata = {
+  title: 'Politique de remboursement',
+  description: 'Conditions et procédure de remboursement pour les services KR Global Solutions LTD.',
+  alternates: { canonical: '/remboursement' },
+};
 
 export default function RemboursementPage() {
   return (
@@ -6,7 +13,7 @@ export default function RemboursementPage() {
       title="Politique de remboursement"
       description="KR Global Solutions LTD s'engage à traiter toute demande de remboursement de manière équitable et transparente."
     >
-      <div className="space-y-10 text-sm text-muted-foreground leading-relaxed">
+      <div className="space-y-10 text-sm text-muted leading-relaxed">
         <section className="space-y-3">
           <h2 className="text-base font-semibold text-foreground">Délai</h2>
           <p>Une demande de remboursement peut être effectuée dans un délai de <strong>7 jours</strong> suivant la date d&apos;achat.</p>

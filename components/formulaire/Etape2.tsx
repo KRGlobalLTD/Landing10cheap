@@ -119,9 +119,12 @@ export function Etape2({ data, onChange }: Etape2Props) {
             />
             {data.logoFile ? (
               <div className="flex items-center gap-4 rounded-xl border border-[#AAFF00]/30 bg-[#1a1a1a] p-4">
+                {/* eslint-disable-next-line @next/next/no-img-element -- URL.createObjectURL incompatible avec next/image */}
                 <img
                   src={URL.createObjectURL(data.logoFile)}
                   alt="Logo preview"
+                  width={48}
+                  height={48}
                   className="h-12 w-12 rounded-lg object-contain bg-white/5"
                 />
                 <div className="flex-1 min-w-0">

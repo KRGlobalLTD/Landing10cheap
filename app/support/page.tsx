@@ -1,7 +1,14 @@
+import type { Metadata } from 'next';
 import { PageShell } from '@/components/shared/page-shell';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { SITE_CONFIG } from '@/lib/constants/site';
+
+export const metadata: Metadata = {
+  title: 'Support',
+  description: 'Contactez l\'équipe KR Global Solutions LTD pour toute question avant ou après votre commande.',
+  alternates: { canonical: '/support' },
+};
 
 export default function SupportPage() {
   return (

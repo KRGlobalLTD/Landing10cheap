@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const LIME = '#AAFF00';
 
@@ -12,7 +12,6 @@ function Badge({ label }: { label: string }) {
   );
 }
 
-import React from 'react';
 import { LetterSlide } from '@/components/ui/letter-slide';
 
 const Card = React.forwardRef<HTMLDivElement, { children: React.ReactNode; style?: React.CSSProperties }>(
@@ -127,6 +126,7 @@ function DesignCard({ height = 260 }: { height?: number }) {
     );
     observer.observe(el);
     return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -285,6 +285,7 @@ export function FormAnimation() {
     }
 
     return () => T.forEach(clearTimeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
   useEffect(() => {

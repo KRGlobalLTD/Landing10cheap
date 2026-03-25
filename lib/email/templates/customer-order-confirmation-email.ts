@@ -46,9 +46,11 @@ export function buildCustomerOrderConfirmationEmailTemplate(
 ): CustomerOrderConfirmationEmailTemplate {
   const { brief, order, customerEmail, confirmedAt, orderNumber, links, support } = payload;
 
-  const firstName = getFirstName(brief.customer.fullName);
+  const firstName = brief ? getFirstName(brief.customer.fullName) : null;
   const greeting = firstName ? `Bonjour ${firstName},` : 'Bonjour,';
-  const businessName = normalizeValue(brief.business.businessName);
+  const businessName = brief
+    ? normalizeValue(brief.business.businessName)
+    : normalizeValue(order.businessName);
   const confirmationDate = formatDisplayDate(confirmedAt);
   const amountFormatted = formatAmount(order.amountTotal, order.currency);
   const subject = `Confirmation de votre commande — ${orderNumber}`;
