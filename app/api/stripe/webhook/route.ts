@@ -30,6 +30,7 @@ function toOrderFromCheckoutSession(session: Stripe.Checkout.Session, status: Cr
   const metadata = normalizeMetadata(session.metadata);
 
   return {
+    orderNumber: null,
     stripeSessionId: session.id,
     paymentIntentId: typeof session.payment_intent === 'string' ? session.payment_intent : null,
     status,
@@ -199,6 +200,7 @@ async function handlePaymentIntentFailedEvent(paymentIntent: Stripe.PaymentInten
   const metadata = normalizeMetadata(paymentIntent.metadata);
 
   const { created } = await ordersRepository.saveOrder({
+    orderNumber: null,
     stripeSessionId,
     paymentIntentId: paymentIntent.id,
     status: 'payment_failed',
