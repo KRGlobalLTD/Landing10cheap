@@ -1,36 +1,25 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 import { sendEmailWithResend } from '@/lib/email/resend';
 import { captureApiException } from '@/lib/monitoring/sentry';
 
 export const runtime = 'nodejs';
 
-// In-memory rate limiter — resets on cold start, good enough for serverless
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT_MAX = 5;
-const RATE_LIMIT_WINDOW_MS = 60_000;
+const ratelimit = new Ratelimit({
+  redis: new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL!,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN!
+  }),
+  limiter: Ratelimit.slidingWindow(5, '60 s'),
+  prefix: 'ratelimit:contact'
+});
 
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for');
   if (forwarded) return forwarded.split(',')[0].trim();
-  return request.headers.get('x-real-ip') ?? 'unknown';
-}
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return false;
-  }
-
-  if (entry.count >= RATE_LIMIT_MAX) {
-    return true;
-  }
-
-  entry.count++;
-  return false;
+  return request.headers.get('x-real-ip') ?? 'anonymous';
 }
 
 const contactSchema = z.object({
@@ -113,10 +102,11 @@ function buildConfirmationHtml(name: string) {
 
 export async function POST(request: Request) {
   const ip = getClientIp(request);
+  const { success } = await ratelimit.limit(ip);
 
-  if (isRateLimited(ip)) {
+  if (!success) {
     return NextResponse.json(
-      { error: 'Too many requests.' },
+      { error: 'Trop de requêtes. Réessaie dans une minute.' },
       { status: 429, headers: { 'Retry-After': '60' } }
     );
   }
