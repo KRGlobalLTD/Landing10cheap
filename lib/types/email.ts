@@ -4,11 +4,18 @@ import type { OrderRecord } from '@/lib/types/order';
 
 export type EmailProvider = 'resend';
 
+export type EmailAttachment = {
+  filename: string;
+  content: string; // base64-encoded
+};
+
 export type EmailSendPayload = {
   to: string;
   subject: string;
   html: string;
   text?: string;
+  replyTo?: string;
+  attachments?: EmailAttachment[];
 };
 
 export type EmailSendResult = {

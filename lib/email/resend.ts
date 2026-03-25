@@ -34,7 +34,9 @@ export async function sendEmailWithResend(payload: EmailSendPayload): Promise<Em
       to: [payload.to],
       subject: payload.subject,
       html: payload.html,
-      text: payload.text
+      text: payload.text,
+      ...(payload.replyTo ? { reply_to: payload.replyTo } : {}),
+      ...(payload.attachments?.length ? { attachments: payload.attachments } : {})
     })
   });
 

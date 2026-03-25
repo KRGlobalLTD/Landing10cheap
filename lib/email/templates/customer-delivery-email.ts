@@ -15,146 +15,258 @@ function escapeHtml(value: string) {
     .replaceAll("'", '&#039;');
 }
 
-function normalizeValue(value: string | null | undefined) {
-  return (value ?? '').trim();
+function normalize(value: string | null | undefined, fallback = '') {
+  return (value ?? '').trim() || fallback;
 }
 
 function formatDisplayDate(value: string) {
   return new Date(value).toLocaleString('fr-FR', {
-    dateStyle: 'medium',
+    dateStyle: 'long',
     timeStyle: 'short',
     timeZone: 'Europe/Paris'
   });
 }
 
 function getFirstName(fullName: string | null | undefined) {
-  const cleanName = normalizeValue(fullName);
-
-  if (!cleanName) {
-    return null;
-  }
-
-  return cleanName.split(/\s+/)[0] || null;
-}
-
-function buildUsefulLinks(payload: CustomerDeliveryEmailPayload) {
-  const { delivery } = payload;
-
-  return [
-    { label: 'Accès admin', value: normalizeValue(delivery.adminUrl) },
-    { label: 'Dépôt GitHub', value: normalizeValue(delivery.githubUrl) },
-    { label: 'Projet Vercel', value: normalizeValue(delivery.vercelUrl) }
-  ].filter((item) => item.value.length > 0);
+  const clean = normalize(fullName);
+  if (!clean) return null;
+  return clean.split(/\s+/)[0] || null;
 }
 
 export function buildCustomerDeliveryEmailTemplate(payload: CustomerDeliveryEmailPayload): CustomerDeliveryEmailTemplate {
   const { brief, delivery, customerEmail, deliveredAt } = payload;
 
   const firstName = getFirstName(brief.customer.fullName);
-  const greetingName = firstName ? `${firstName},` : 'Bonjour,';
-  const businessName = normalizeValue(brief.business.businessName) || 'votre activité';
+  const greeting = firstName ? `Bonjour ${firstName},` : 'Bonjour,';
+  const businessName = normalize(brief.business.businessName, 'votre activité');
   const deliveredDate = formatDisplayDate(deliveredAt);
-  const mainSiteUrl = normalizeValue(delivery.siteUrl);
-  const supportEmail = normalizeValue(delivery.supportEmail) || payload.support.email || '';
-  const supportWhatsapp = normalizeValue(delivery.supportWhatsapp) || payload.support.whatsapp || '';
-  const customMessage = normalizeValue(delivery.customMessage);
-  const usefulLinks = buildUsefulLinks(payload);
+  const siteUrl = normalize(delivery.siteUrl);
+  const supportEmail = normalize(delivery.supportEmail) || normalize(payload.support.email);
+  const whatsappUrl = normalize(delivery.supportWhatsapp) || normalize(payload.support.whatsapp);
+  const calendlyUrl = 'https://calendly.com/krglobalsolutionsltd/30-minute-meeting-clone';
+  const customMessage = normalize(delivery.customMessage);
+  const appUrl = normalize(process.env.NEXT_PUBLIC_APP_URL, 'https://krglobalsolutionsltd.com');
 
-  const subject = 'Votre landing page est prête ✅';
+  const subject = `Votre site est prêt — ${businessName}`;
 
-  const usefulLinksHtml = usefulLinks.length
-    ? `<ul style="margin:8px 0 0;padding-left:18px;color:#334155;font-size:14px;">
-        ${usefulLinks
-          .map((item) => `<li style="margin:0 0 6px;"><strong>${escapeHtml(item.label)} :</strong> <a href="${escapeHtml(item.value)}" style="color:#0f172a;">${escapeHtml(item.value)}</a></li>`)
-          .join('')}
-      </ul>`
-    : '<p style="margin:8px 0 0;color:#334155;font-size:14px;">Aucun lien additionnel n’est nécessaire pour le moment.</p>';
+  const usefulLinks = [
+    delivery.adminUrl ? { label: 'Accès admin', url: delivery.adminUrl } : null,
+    delivery.githubUrl ? { label: 'Code source (GitHub)', url: delivery.githubUrl } : null,
+    delivery.vercelUrl ? { label: 'Tableau de bord Vercel', url: delivery.vercelUrl } : null
+  ].filter((l): l is { label: string; url: string } => l !== null);
 
-  const supportLines = [
-    supportEmail ? `Email : ${supportEmail}` : null,
-    supportWhatsapp ? `WhatsApp : ${supportWhatsapp}` : null
-  ].filter((line): line is string => Boolean(line));
+  const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(subject)}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f4f5;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f5;padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
 
-  const supportHtml = supportLines.length
-    ? `<p style="margin:8px 0 0;color:#334155;font-size:14px;">${supportLines.map(escapeHtml).join('<br />')}</p>`
-    : '<p style="margin:8px 0 0;color:#334155;font-size:14px;">Répondez simplement à cet email si vous avez besoin de nous.</p>';
+          <!-- HEADER -->
+          <tr>
+            <td style="background:#0f172a;padding:28px 32px;text-align:center;">
+              <p style="margin:0;color:#ffffff;font-size:20px;font-weight:700;letter-spacing:0.5px;">
+                KR Global Solutions LTD
+              </p>
+              <p style="margin:6px 0 0;color:#94a3b8;font-size:13px;">
+                orders@krglobalsolutionsltd.com
+              </p>
+            </td>
+          </tr>
 
-  const customMessageHtml = customMessage
-    ? `<div style="border:1px solid #e2e8f0;border-radius:10px;padding:14px;background:#ffffff;margin-top:10px;"><p style="margin:0;color:#334155;font-size:14px;white-space:pre-line;">${escapeHtml(customMessage)}</p></div>`
-    : '';
+          <!-- HERO -->
+          <tr>
+            <td style="padding:32px 32px 24px;border-bottom:1px solid #f1f5f9;">
+              <p style="margin:0 0 6px;color:#64748b;font-size:14px;">${escapeHtml(greeting)}</p>
+              <h1 style="margin:0 0 12px;font-size:24px;color:#0f172a;line-height:1.3;">
+                Votre site est en ligne 🎉
+              </h1>
+              <p style="margin:0;color:#475569;font-size:15px;line-height:1.6;">
+                Excellente nouvelle — le site web de <strong>${escapeHtml(businessName)}</strong> est
+                prêt et accessible en ligne dès maintenant.
+              </p>
+            </td>
+          </tr>
 
-  const html = `
-  <div style="font-family:Arial,Helvetica,sans-serif;color:#0f172a;line-height:1.5;max-width:680px;margin:0 auto;padding:24px 16px;">
-    <p style="margin:0 0 16px;font-size:15px;">${escapeHtml(greetingName)}</p>
+          <!-- SITE URL -->
+          <tr>
+            <td style="padding:24px 32px;border-bottom:1px solid #f1f5f9;">
+              <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.5px;">
+                Votre site
+              </h2>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 20px;">
+                    <p style="margin:0 0 4px;font-size:12px;color:#16a34a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
+                      En ligne ✓
+                    </p>
+                    <a href="${escapeHtml(siteUrl)}"
+                       style="font-size:16px;font-weight:700;color:#0f172a;word-break:break-all;text-decoration:none;">
+                      ${escapeHtml(siteUrl)}
+                    </a>
+                    <p style="margin:6px 0 0;font-size:12px;color:#64748b;">Livré le ${escapeHtml(deliveredDate)}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-    <h1 style="font-size:22px;margin:0 0 12px;">Votre landing page est en ligne 🎉</h1>
-    <p style="margin:0 0 16px;color:#334155;font-size:15px;">
-      Bonne nouvelle : la landing page pour <strong>${escapeHtml(businessName)}</strong> est prête.
-    </p>
+          ${customMessage ? `
+          <!-- MESSAGE PERSONNALISE -->
+          <tr>
+            <td style="padding:0 32px 24px;border-bottom:1px solid #f1f5f9;">
+              <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.5px;">
+                Message de notre équipe
+              </h2>
+              <div style="border:1px solid #e2e8f0;border-radius:8px;padding:16px;background:#f8fafc;">
+                <p style="margin:0;font-size:14px;color:#475569;white-space:pre-line;line-height:1.6;">${escapeHtml(customMessage)}</p>
+              </div>
+            </td>
+          </tr>` : ''}
 
-    <div style="border:1px solid #e2e8f0;border-radius:12px;padding:16px;background:#f8fafc;">
-      <h2 style="font-size:16px;margin:0 0 10px;">Lien principal</h2>
-      <p style="margin:0;font-size:14px;">
-        <a href="${escapeHtml(mainSiteUrl)}" style="color:#0f172a;font-weight:700;">${escapeHtml(mainSiteUrl)}</a>
-      </p>
-      <p style="margin:8px 0 0;color:#475569;font-size:13px;">Livrée le ${escapeHtml(deliveredDate)}.</p>
-    </div>
+          ${usefulLinks.length > 0 ? `
+          <!-- ACCES UTILES -->
+          <tr>
+            <td style="padding:${customMessage ? '0' : '0'} 32px 24px;border-bottom:1px solid #f1f5f9;">
+              <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.5px;">
+                Vos accès
+              </h2>
+              <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+                ${usefulLinks.map((link, i) => `
+                <tr style="background:${i % 2 === 0 ? '#f8fafc' : '#ffffff'};">
+                  <td style="padding:10px 16px;font-size:13px;color:#64748b;width:40%;${i > 0 ? 'border-top:1px solid #f1f5f9;' : ''}">${escapeHtml(link.label)}</td>
+                  <td style="padding:10px 16px;font-size:13px;${i > 0 ? 'border-top:1px solid #f1f5f9;' : ''}">
+                    <a href="${escapeHtml(link.url)}" style="color:#2563eb;word-break:break-all;">${escapeHtml(link.url)}</a>
+                  </td>
+                </tr>`).join('')}
+              </table>
+            </td>
+          </tr>` : ''}
 
-    <h2 style="font-size:16px;margin:20px 0 8px;">Accès utiles</h2>
-    ${usefulLinksHtml}
+          <!-- DOCUMENTS JOINTS -->
+          <tr>
+            <td style="padding:24px 32px;border-bottom:1px solid #f1f5f9;">
+              <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.5px;">
+                Documents joints
+              </h2>
+              <table cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:4px 0;font-size:14px;color:#475569;">
+                    📄 <strong>Guide client</strong> — Comment gérer et faire évoluer votre site
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:4px 0;font-size:14px;color:#475569;">
+                    💰 <strong>Grille tarifaire</strong> — Ajouts, évolutions et maintenance
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:10px 0 0;font-size:13px;color:#94a3b8;">
+                Ces documents sont aussi disponibles en ligne :
+                <a href="${escapeHtml(appUrl)}/api/pdfs/guide-client" style="color:#64748b;">Guide client</a>
+                &nbsp;·&nbsp;
+                <a href="${escapeHtml(appUrl)}/api/pdfs/grille-tarifaire" style="color:#64748b;">Grille tarifaire</a>
+              </p>
+            </td>
+          </tr>
 
-    <h2 style="font-size:16px;margin:20px 0 8px;">Rappel important</h2>
-    <p style="margin:0;color:#334155;font-size:14px;">
-      Une correction mineure est incluse. Répondez à cet email avec la modification souhaitée et nous nous en occupons rapidement.
-    </p>
+          <!-- RAPPEL CORRECTION -->
+          <tr>
+            <td style="padding:24px 32px;border-bottom:1px solid #f1f5f9;background:#fffbeb;">
+              <p style="margin:0;font-size:14px;color:#92400e;line-height:1.6;">
+                💡 <strong>Rappel :</strong> Une correction mineure est incluse dans votre offre.
+                Répondez à cet email en précisant la modification souhaitée.
+              </p>
+            </td>
+          </tr>
 
-    <h2 style="font-size:16px;margin:20px 0 8px;">Support</h2>
-    ${supportHtml}
+          <!-- SUPPORT -->
+          <tr>
+            <td style="padding:24px 32px;border-bottom:1px solid #f1f5f9;">
+              <h2 style="margin:0 0 14px;font-size:15px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.5px;">
+                Besoin d&apos;aide ou d&apos;une évolution ?
+              </h2>
+              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:0 8px;">
+                ${whatsappUrl ? `
+                <tr>
+                  <td>
+                    <a href="${escapeHtml(whatsappUrl)}"
+                       style="display:inline-block;background:#25d366;color:#ffffff;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">
+                      💬 Écrire sur WhatsApp
+                    </a>
+                  </td>
+                </tr>` : ''}
+                <tr>
+                  <td style="${whatsappUrl ? 'padding-top:8px;' : ''}">
+                    <a href="${escapeHtml(calendlyUrl)}"
+                       style="display:inline-block;background:#0f172a;color:#ffffff;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">
+                      📅 Réserver un appel gratuit (30 min)
+                    </a>
+                  </td>
+                </tr>
+                ${supportEmail ? `
+                <tr>
+                  <td style="padding-top:8px;font-size:14px;color:#475569;">
+                    📧&nbsp;
+                    <a href="mailto:${escapeHtml(supportEmail)}" style="color:#0f172a;font-weight:600;">
+                      ${escapeHtml(supportEmail)}
+                    </a>
+                  </td>
+                </tr>` : ''}
+              </table>
+            </td>
+          </tr>
 
-    ${customMessageHtml}
+          <!-- FOOTER -->
+          <tr>
+            <td style="padding:20px 32px;text-align:center;">
+              <p style="margin:0 0 4px;font-size:14px;color:#475569;">
+                Merci pour votre confiance,<br />
+                <strong>KR Global Solutions LTD</strong>
+              </p>
+              <p style="margin:8px 0 0;font-size:12px;color:#94a3b8;">
+                Référence : ${escapeHtml(brief.id)} · ${escapeHtml(customerEmail)}
+              </p>
+            </td>
+          </tr>
 
-    <p style="margin:24px 0 0;color:#334155;font-size:14px;">
-      Merci pour votre confiance,<br />
-      Siteasy
-    </p>
-
-    <p style="margin:8px 0 0;color:#64748b;font-size:12px;">Référence projet : ${escapeHtml(brief.id)}</p>
-    <p style="margin:4px 0 0;color:#64748b;font-size:12px;">Email client : ${escapeHtml(customerEmail)}</p>
-  </div>
-  `;
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
 
   const text = [
-    greetingName,
+    greeting,
     '',
-    'Votre landing page est en ligne.',
-    `La landing page pour ${businessName} est prête.`,
+    `Votre site est en ligne : ${siteUrl}`,
+    `Livré le : ${deliveredDate}`,
     '',
-    'Lien principal :',
-    mainSiteUrl,
-    `Livrée le : ${deliveredDate}`,
+    ...(customMessage ? ['Message de notre équipe :', customMessage, ''] : []),
+    ...(usefulLinks.length > 0 ? ['Vos accès :', ...usefulLinks.map(l => `- ${l.label} : ${l.url}`), ''] : []),
+    'Documents joints :',
+    '- Guide client : Comment gérer et faire évoluer votre site',
+    '- Grille tarifaire : Ajouts, évolutions et maintenance',
     '',
-    'Accès utiles :',
-    ...usefulLinks.map((item) => `- ${item.label} : ${item.value}`),
-    ...(usefulLinks.length === 0 ? ['- Aucun lien additionnel pour le moment.'] : []),
-    '',
-    'Rappel : une correction mineure est incluse.',
-    'Répondez à cet email avec la modification souhaitée.',
+    'Rappel : une correction mineure est incluse. Répondez à cet email.',
     '',
     'Support :',
-    ...supportLines,
-    ...(supportLines.length === 0 ? ['Répondez simplement à cet email si besoin.'] : []),
-    ...(customMessage ? ['', 'Message personnalisé :', customMessage] : []),
+    ...(whatsappUrl ? [`WhatsApp : ${whatsappUrl}`] : []),
+    `Calendly (appel gratuit) : ${calendlyUrl}`,
+    ...(supportEmail ? [`Email : ${supportEmail}`] : []),
     '',
-    `Référence projet : ${brief.id}`,
-    `Email client : ${customerEmail}`,
+    `Référence : ${brief.id}`,
     '',
     'Merci pour votre confiance,',
-    'Siteasy'
+    'KR Global Solutions LTD'
   ].join('\n');
 
-  return {
-    subject,
-    html,
-    text
-  };
+  return { subject, html, text };
 }

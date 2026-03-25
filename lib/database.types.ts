@@ -111,6 +111,7 @@ export type Database = {
           id: string
           metadata: Json
           notifications: Json
+          delivery_status: string
           order_number: string | null
           paid_at: string | null
           payment_intent_id: string | null
@@ -125,6 +126,7 @@ export type Database = {
           created_at?: string
           currency?: string
           customer_email?: string | null
+          delivery_status?: string
           id?: string
           metadata?: Json
           notifications?: Json
@@ -142,6 +144,7 @@ export type Database = {
           created_at?: string
           currency?: string
           customer_email?: string | null
+          delivery_status?: string
           id?: string
           metadata?: Json
           notifications?: Json
