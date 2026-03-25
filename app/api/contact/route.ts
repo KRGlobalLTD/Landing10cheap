@@ -5,6 +5,34 @@ import { captureApiException } from '@/lib/monitoring/sentry';
 
 export const runtime = 'nodejs';
 
+// In-memory rate limiter — resets on cold start, good enough for serverless
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+
+function getClientIp(request: Request): string {
+  const forwarded = request.headers.get('x-forwarded-for');
+  if (forwarded) return forwarded.split(',')[0].trim();
+  return request.headers.get('x-real-ip') ?? 'unknown';
+}
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+
+  if (entry.count >= RATE_LIMIT_MAX) {
+    return true;
+  }
+
+  entry.count++;
+  return false;
+}
+
 const contactSchema = z.object({
   name: z.string().trim().min(2).max(100),
   email: z.string().trim().email().max(254),
@@ -84,6 +112,15 @@ function buildConfirmationHtml(name: string) {
 }
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: 'Too many requests.' },
+      { status: 429, headers: { 'Retry-After': '60' } }
+    );
+  }
+
   try {
     const body = await request.json();
     const parsed = contactSchema.safeParse(body);
