@@ -1,9 +1,11 @@
 import { randomUUID } from 'node:crypto';
 import { getSupabaseServerClient } from '@/lib/supabase';
+import { generateOrderNumber } from '@/lib/utils/order-number';
 import type { CreateOrderInput, OrderNotifications, OrderRecord } from '@/lib/types/order';
 
 type OrderRow = {
   id: string;
+  order_number: string | null;
   stripe_session_id: string;
   payment_intent_id: string | null;
   status: string;
@@ -22,6 +24,7 @@ type OrderRow = {
 function rowToRecord(row: OrderRow): OrderRecord {
   return {
     id: row.id,
+    orderNumber: row.order_number,
     stripeSessionId: row.stripe_session_id,
     paymentIntentId: row.payment_intent_id,
     status: row.status as OrderRecord['status'],
@@ -57,10 +60,13 @@ export async function saveOrder(input: CreateOrderInput): Promise<{ order: Order
   const existing = await getOrderByStripeSessionId(input.stripeSessionId);
   if (existing) return { order: existing, created: false };
 
+  const orderNumber = input.status === 'paid' ? await generateOrderNumber() : null;
+
   const { data, error } = await supabase
     .from('order_records')
     .insert({
       id: randomUUID(),
+      order_number: orderNumber,
       stripe_session_id: input.stripeSessionId,
       payment_intent_id: input.paymentIntentId,
       status: input.status,

@@ -111,6 +111,7 @@ export type Database = {
           id: string
           metadata: Json
           notifications: Json
+          order_number: string | null
           paid_at: string | null
           payment_intent_id: string | null
           product: string
@@ -127,6 +128,7 @@ export type Database = {
           id?: string
           metadata?: Json
           notifications?: Json
+          order_number?: string | null
           paid_at?: string | null
           payment_intent_id?: string | null
           product?: string
@@ -143,6 +145,7 @@ export type Database = {
           id?: string
           metadata?: Json
           notifications?: Json
+          order_number?: string | null
           paid_at?: string | null
           payment_intent_id?: string | null
           product?: string

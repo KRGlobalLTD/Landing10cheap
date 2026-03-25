@@ -17,6 +17,7 @@ export type OrderNotifications = {
 
 export type OrderRecord = {
   id: string;
+  orderNumber: string | null;
   stripeSessionId: string;
   paymentIntentId: string | null;
   status: OrderStatus;

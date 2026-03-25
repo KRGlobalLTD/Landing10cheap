@@ -26,11 +26,9 @@ function sanitizePayload(payload: CheckoutRequestPayload) {
 export async function POST(request: Request) {
   try {
     const rawBody = await request.json();
-    console.log('BODY REÇU:', JSON.stringify(rawBody, null, 2));
     const parsedBody = checkoutPayloadSchema.safeParse(rawBody);
 
     if (!parsedBody.success) {
-      console.log('ERREUR ZOD:', JSON.stringify(parsedBody.error, null, 2));
       return NextResponse.json({ error: 'Payload invalide pour Checkout.' }, { status: 400 });
     }
 

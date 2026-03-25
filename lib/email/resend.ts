@@ -1,7 +1,7 @@
 import type { EmailSendPayload, EmailSendResult } from '@/lib/types/email';
 
 const RESEND_API_URL = 'https://api.resend.com/emails';
-const DEFAULT_FROM = 'Siteasy <onboarding@resend.dev>';
+const DEFAULT_FROM = 'KR Global Solutions LTD <orders@krglobalsolutionsltd.com>';
 
 type ResendApiResponse = {
   id?: string;

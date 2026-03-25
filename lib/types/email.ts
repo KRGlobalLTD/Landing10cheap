@@ -33,9 +33,11 @@ export type CustomerOrderConfirmationEmailPayload = {
   order: OrderRecord;
   confirmedAt: string;
   customerEmail: string;
+  orderNumber: string;
   support: {
     email?: string;
     whatsapp?: string;
+    calendly?: string;
   };
   links: {
     homeUrl: string;

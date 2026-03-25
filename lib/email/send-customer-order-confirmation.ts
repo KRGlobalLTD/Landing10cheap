@@ -20,7 +20,8 @@ function buildAbsoluteUrl(baseUrl: string, path: string) {
 function getCustomerSupportChannels() {
   return {
     email: process.env.CUSTOMER_SUPPORT_EMAIL || undefined,
-    whatsapp: process.env.CUSTOMER_SUPPORT_WHATSAPP || undefined
+    whatsapp: process.env.CUSTOMER_SUPPORT_WHATSAPP || undefined,
+    calendly: process.env.CUSTOMER_SUPPORT_CALENDLY || undefined
   };
 }
 
@@ -57,6 +58,7 @@ export async function sendCustomerOrderConfirmationEmail(params: { brief: BriefR
     order,
     confirmedAt: brief.payment.paidAt || order.paidAt || new Date().toISOString(),
     customerEmail,
+    orderNumber: order.orderNumber ?? order.stripeSessionId.slice(-8).toUpperCase(),
     support,
     links: {
       homeUrl: buildAbsoluteUrl(baseUrl, '/'),
