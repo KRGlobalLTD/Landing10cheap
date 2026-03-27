@@ -1,43 +1,17 @@
 import type { Metadata } from 'next';
-import { PageShell } from '@/components/shared/page-shell';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Suspense } from 'react';
+import SuccesContent from './SuccesContent';
 
 export const metadata: Metadata = {
-  title: 'Paiement reçu',
-  description: 'Confirmation de paiement réussie — KR Global Solutions LTD.',
-  alternates: {
-    canonical: '/succes'
-  },
-  openGraph: {
-    title: 'Paiement reçu',
-    description: 'Confirmation de paiement réussie — KR Global Solutions LTD.',
-    url: '/succes'
-  }
+  title: 'Commande confirmée — Siteasy',
+  description: 'Votre paiement a été reçu. Votre site web est en cours de préparation.',
+  alternates: { canonical: '/succes' },
 };
 
-export default function SuccesPage() {
+export default function SuccesPage({ searchParams }: { searchParams: { prenom?: string } }) {
   return (
-    <PageShell
-      title="Paiement reçu"
-      description="Merci pour votre commande. Nous confirmons le paiement côté serveur."
-    >
-      <Card className="space-y-4 bg-zinc-950 text-zinc-100">
-        <p className="text-sm text-zinc-300">
-          Nous avons bien reçu votre retour de paiement. La confirmation finale est en cours côté serveur pour sécuriser
-          votre commande.
-        </p>
-        <p className="text-sm text-zinc-300">
-          Une fois validée, nous lançons la préparation de votre landing page 1 page. Livraison en 30 secondes avec
-          hébergement inclus.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <Button href="/">Retour à l’accueil</Button>
-          <Button href="/formulaire" variant="ghost">
-            Revenir au formulaire
-          </Button>
-        </div>
-      </Card>
-    </PageShell>
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a]" />}>
+      <SuccesContent prenom={searchParams.prenom} />
+    </Suspense>
   );
 }

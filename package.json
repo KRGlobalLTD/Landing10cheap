@@ -12,6 +12,8 @@
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
     "@sentry/nextjs": "^8.55.0",
+    "@stripe/react-stripe-js": "^6.0.0",
+    "@stripe/stripe-js": "^9.0.0",
     "@supabase/supabase-js": "^2.99.3",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.37.0",

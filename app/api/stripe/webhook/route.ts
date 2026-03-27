@@ -187,6 +187,42 @@ async function handleCheckoutSessionEvent(session: Stripe.Checkout.Session, stat
   });
 }
 
+async function handlePaymentIntentSucceededEvent(paymentIntent: Stripe.PaymentIntent) {
+  const metadata = normalizeMetadata(paymentIntent.metadata);
+
+  const { created, order } = await ordersRepository.saveOrder({
+    orderNumber: null,
+    stripeSessionId: paymentIntent.id,
+    paymentIntentId: paymentIntent.id,
+    status: 'paid',
+    product: metadata.product || PAYMENT_METADATA.product,
+    amountTotal: paymentIntent.amount,
+    currency: paymentIntent.currency,
+    customerEmail: paymentIntent.receipt_email ?? metadata.customerEmail ?? null,
+    businessName: metadata.businessName || null,
+    source: metadata.source || PAYMENT_METADATA.source,
+    paidAt: new Date().toISOString(),
+    metadata,
+  });
+
+  if (!created) {
+    console.info(`[stripe-webhook] PaymentIntent already handled: ${paymentIntent.id}`);
+    return;
+  }
+
+  console.info(`[stripe-webhook] Order saved for PaymentIntent ${paymentIntent.id}.`);
+
+  const paidBrief = await markBriefAsPaid({
+    briefId: metadata.briefId || null,
+    stripeSessionId: paymentIntent.id,
+    amountTotal: paymentIntent.amount,
+    currency: paymentIntent.currency,
+  });
+
+  await maybeSendInternalOrderEmail({ order, brief: paidBrief ?? null });
+  await maybeSendCustomerOrderConfirmationEmail({ order, brief: paidBrief ?? null });
+}
+
 async function handlePaymentIntentFailedEvent(paymentIntent: Stripe.PaymentIntent) {
   const stripeSessionId = extractSessionIdFromPaymentIntent(paymentIntent);
 
@@ -273,6 +309,10 @@ export async function POST(request: Request) {
       }
       case 'checkout.session.expired': {
         await handleCheckoutSessionEvent(event.data.object as Stripe.Checkout.Session, 'expired');
+        break;
+      }
+      case 'payment_intent.succeeded': {
+        await handlePaymentIntentSucceededEvent(event.data.object as Stripe.PaymentIntent);
         break;
       }
       case 'payment_intent.payment_failed': {

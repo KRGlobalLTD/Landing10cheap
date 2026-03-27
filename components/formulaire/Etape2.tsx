@@ -45,7 +45,21 @@ interface Etape2Props {
 
 export function Etape2({ data, onChange }: Etape2Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const photosInputRef = useRef<HTMLInputElement>(null);
   const [customColorInput, setCustomColorInput] = useState('#3b82f6');
+
+  function handlePhotosChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    const remaining = 5 - data.photosExemples.length;
+    const valid = files.filter((f) => f.size <= 5 * 1024 * 1024).slice(0, remaining);
+    if (valid.length < files.length) alert('Certaines photos dépassent 5Mo et ont été ignorées.');
+    onChange('photosExemples', [...data.photosExemples, ...valid]);
+    e.target.value = '';
+  }
+
+  function removePhoto(index: number) {
+    onChange('photosExemples', data.photosExemples.filter((_, i) => i !== index));
+  }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -151,6 +165,74 @@ export function Etape2({ data, onChange }: Etape2Props) {
               </button>
             )}
           </div>
+        )}
+      </div>
+
+      {/* Photos exemples */}
+      <div>
+        <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-zinc-400">
+          Photos exemples pour votre site
+        </label>
+        <p className="mb-3 text-xs text-zinc-600">Ajoutez jusqu&apos;à 5 photos d&apos;ambiance, produits ou inspirations — max 5Mo par photo</p>
+
+        <input
+          ref={photosInputRef}
+          type="file"
+          accept=".png,.jpg,.jpeg,.webp"
+          multiple
+          className="hidden"
+          onChange={handlePhotosChange}
+        />
+
+        {data.photosExemples.length > 0 && (
+          <div className="mb-3 grid grid-cols-3 gap-2 sm:grid-cols-5">
+            {data.photosExemples.map((file, i) => (
+              <div key={i} className="group relative aspect-square">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt={`Photo ${i + 1}`}
+                  className="h-full w-full rounded-xl object-cover border border-white/10"
+                />
+                <button
+                  type="button"
+                  onClick={() => removePhoto(i)}
+                  className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-800 text-[10px] text-zinc-300 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500 hover:text-white"
+                  aria-label="Supprimer"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+            {data.photosExemples.length < 5 && (
+              <button
+                type="button"
+                onClick={() => photosInputRef.current?.click()}
+                className="aspect-square rounded-xl border border-dashed border-white/15 bg-white/[0.02] flex items-center justify-center text-zinc-600 hover:border-[#AAFF00]/40 hover:text-zinc-400 transition-all text-2xl"
+                aria-label="Ajouter une photo"
+              >
+                +
+              </button>
+            )}
+          </div>
+        )}
+
+        {data.photosExemples.length === 0 && (
+          <button
+            type="button"
+            onClick={() => photosInputRef.current?.click()}
+            className="w-full rounded-xl border border-dashed border-white/20 bg-white/[0.02] py-6 text-center text-sm text-zinc-400 hover:border-[#AAFF00]/40 hover:text-white transition-all"
+          >
+            <span className="block text-2xl mb-1">🖼️</span>
+            Cliquez pour ajouter des photos
+            <span className="block text-xs mt-1 text-zinc-600">PNG, JPG, WEBP — jusqu&apos;à 5 photos</span>
+          </button>
+        )}
+
+        {data.photosExemples.length > 0 && (
+          <p className="mt-1 text-right text-xs text-zinc-600">
+            {data.photosExemples.length}/5 photo{data.photosExemples.length > 1 ? 's' : ''}
+          </p>
         )}
       </div>
 

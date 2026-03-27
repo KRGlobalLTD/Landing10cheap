@@ -75,21 +75,12 @@ function FormulairePageInner() {
     setIsLoading(true);
     setSubmitError(null);
     try {
-      const checkoutPayload = {
-        customerEmail: data.email || undefined,
-        businessName: data.nomEntreprise || data.typeProjet || undefined,
-      };
-      const response = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(checkoutPayload),
-      });
-      const payload = (await response.json()) as { error?: string; url?: string };
-      if (!response.ok || !payload.url) {
-        console.error('[checkout] Stripe API error:', payload);
-        throw new Error(payload.error ?? 'Impossible de créer la session de paiement.');
-      }
-      window.location.href = payload.url;
+      const params = new URLSearchParams();
+      if (data.email) params.set('email', data.email);
+      if (data.prenom) params.set('prenom', data.prenom);
+      const business = data.nomEntreprise || data.typeProjet;
+      if (business) params.set('business', business);
+      navigateTo(`/checkout?${params.toString()}`);
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.');
       setIsLoading(false);

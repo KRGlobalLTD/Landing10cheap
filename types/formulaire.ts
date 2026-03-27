@@ -24,6 +24,9 @@ export interface FormulaireData {
   palettePersonnalisee: string[];
   ton: string;
 
+  // Photos exemples
+  photosExemples: File[];
+
   // Étape 4 — Coordonnées
   prenom: string;
   email: string;
@@ -50,6 +53,7 @@ export const INITIAL_FORM_DATA: FormulaireData = {
   couleurPrincipale: '',
   palettePersonnalisee: [],
   ton: '',
+  photosExemples: [],
   prenom: '',
   email: '',
   telephone: '',
