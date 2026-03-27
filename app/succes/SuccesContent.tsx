@@ -174,7 +174,7 @@ export default function SuccesContent({ prenom }: { prenom?: string }) {
             className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-sm font-semibold text-zinc-950 transition-all hover:opacity-90 active:scale-[0.98]"
             style={{ backgroundColor: '#AAFF00' }}
           >
-            Retour à l'accueil
+            Retour à l&apos;accueil
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
