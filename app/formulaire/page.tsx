@@ -69,8 +69,8 @@ function FormulairePageInner() {
     return step3Valid;
   }
 
-  function goNext() { setDirection(1); setStep((s) => s + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-  function goBack() { setDirection(-1); setStep((s) => s - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function goNext() { setDirection(1); setStep((s) => s + 1); window.scrollTo(0, 0); }
+  function goBack() { setDirection(-1); setStep((s) => s - 1); window.scrollTo(0, 0); }
 
   async function handleSubmit() {
     setIsLoading(true);
@@ -98,9 +98,9 @@ function FormulairePageInner() {
   }
 
   const variants = {
-    enter: (dir: number) => ({ x: dir > 0 ? 60 : -60, opacity: 0, filter: 'blur(4px)' }),
-    center: { x: 0, opacity: 1, filter: 'blur(0px)' },
-    exit: (dir: number) => ({ x: dir > 0 ? -60 : 60, opacity: 0, filter: 'blur(4px)' }),
+    enter: { opacity: 0, filter: 'blur(4px)' },
+    center: { opacity: 1, filter: 'blur(0px)' },
+    exit: { opacity: 0, filter: 'blur(4px)' },
   };
 
   const STEP_TITLES: Record<number, { title: string; sub: string }> = {
@@ -137,10 +137,9 @@ function FormulairePageInner() {
             <p className="mt-1 text-sm text-zinc-500">{STEP_TITLES[step]?.sub}</p>
           </div>
 
-          <AnimatePresence mode="wait" custom={direction}>
+          <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              custom={direction}
               variants={variants}
               initial="enter"
               animate="center"

@@ -21,7 +21,7 @@ const STEPS = [
     number: '03',
     title: 'Publiez en un clic',
     description:
-      "Sous-domaine Espress-page ou votre propre domaine. En ligne immédiatement.",
+      "Sous-domaine KR Global ou votre propre domaine. En ligne immédiatement.",
   }
 ];
 

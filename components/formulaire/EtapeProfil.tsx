@@ -18,12 +18,6 @@ const PROFILS = [
   },
 ];
 
-const TYPES_PROJET = [
-  { id: 'projet', icon: '🚀', label: 'Présenter mon projet', sub: 'Landing page, side project' },
-  { id: 'passion', icon: '📝', label: 'Partager ma passion', sub: 'Blog, vlog, hobby' },
-  { id: 'evenement', icon: '💍', label: 'Célébrer un événement', sub: 'Mariage, anniversaire' },
-  { id: 'asso', icon: '🤝', label: 'Représenter mon asso', sub: 'Club, association' },
-];
 
 const VISIBILITE_OPTIONS = [
   { id: 'complete' as const, label: "L'adresse complète" },
@@ -188,29 +182,6 @@ export function EtapeProfil({ data, onChange }: EtapeProfilProps) {
           {/* — PARTICULIER — */}
           {isParticulier && (
             <div className="space-y-6">
-              <div>
-                <label className="mb-3 block text-xs font-medium uppercase tracking-wider text-zinc-400">
-                  Type de projet <span style={{ color: '#AAFF00' }}>*</span>
-                </label>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  {TYPES_PROJET.map((t) => (
-                    <CardSelectable
-                      key={t.id}
-                      selected={data.typeProjet === t.id}
-                      onClick={() => onChange('typeProjet', t.id)}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="text-xl">{t.icon}</span>
-                        <div>
-                          <p className="text-sm font-medium text-white">{t.label}</p>
-                          <p className="mt-0.5 text-xs" style={{ color: '#6b7280' }}>{t.sub}</p>
-                        </div>
-                      </div>
-                    </CardSelectable>
-                  ))}
-                </div>
-              </div>
-
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-zinc-400">
