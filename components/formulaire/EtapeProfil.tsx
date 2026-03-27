@@ -1,7 +1,6 @@
 'use client';
 
 import { FormulaireData } from '@/types/formulaire';
-import { CardSelectable } from './CardSelectable';
 
 const PROFILS = [
   {

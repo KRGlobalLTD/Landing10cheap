@@ -19,7 +19,6 @@ function FormulairePageInner() {
   const { navigateTo } = usePageTransition();
   const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
-  const [direction, setDirection] = useState(1);
   const [data, setData] = useState<FormulaireData>(INITIAL_FORM_DATA);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -69,8 +68,8 @@ function FormulairePageInner() {
     return step3Valid;
   }
 
-  function goNext() { setDirection(1); setStep((s) => s + 1); window.scrollTo(0, 0); }
-  function goBack() { setDirection(-1); setStep((s) => s - 1); window.scrollTo(0, 0); }
+  function goNext() { setStep((s) => s + 1); window.scrollTo(0, 0); }
+  function goBack() { setStep((s) => s - 1); window.scrollTo(0, 0); }
 
   async function handleSubmit() {
     setIsLoading(true);
