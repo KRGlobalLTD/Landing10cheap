@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { sendEmailWithResend } from '@/lib/email/resend';
-import { generateGuideClientPdf } from '@/lib/pdf/documents/guide-client';
-import { generateGrilleTarifairePdf } from '@/lib/pdf/documents/grille-tarifaire';
+import { sendCustomerDeliveryEmail } from '@/lib/email/send-customer-delivery-email'; // FIXED: migrated from inline HTML to shared function
+import { withDefaultBriefDelivery } from '@/lib/types/delivery'; // FIXED: migrated from inline HTML to shared function
+import type { BriefRecord } from '@/lib/types/brief'; // FIXED: migrated from inline HTML to shared function
 import { getSupabaseServerClient } from '@/lib/supabase';
 import { captureApiException } from '@/lib/monitoring/sentry';
 
@@ -21,6 +21,15 @@ function getAdminSecret() {
   return secret;
 }
 
+// FIXED: same validation pattern as other email functions (send-customer-order-confirmation, send-internal-order-email)
+function getRequiredEnvironmentVariable(name: 'NEXT_PUBLIC_APP_URL') {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing ${name} environment variable.`);
+  }
+  return value;
+}
+
 function verifyAdminSecret(request: Request): boolean {
   const authHeader = request.headers.get('authorization');
   if (authHeader) {
@@ -28,133 +37,6 @@ function verifyAdminSecret(request: Request): boolean {
     return token === getAdminSecret();
   }
   return false;
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
-}
-
-function buildDeliveryHtml(params: {
-  customerName: string;
-  siteUrl: string;
-  orderNumber: string;
-  appUrl: string;
-}) {
-  const { customerName, siteUrl, orderNumber, appUrl } = params;
-  const firstName = customerName.split(/\s+/)[0] || customerName;
-  const calendlyUrl = process.env.CUSTOMER_SUPPORT_CALENDLY || 'https://calendly.com/krglobalsolutionsltd/30-minute-meeting-clone';
-  const whatsappUrl = process.env.CUSTOMER_SUPPORT_WHATSAPP || 'https://wa.me/33743561304';
-
-  return `<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head>
-<body style="margin:0;padding:0;background-color:#f4f4f5;font-family:Arial,Helvetica,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f5;padding:32px 16px;">
-    <tr>
-      <td align="center">
-        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
-
-          <tr>
-            <td style="background:#0f172a;padding:28px 32px;text-align:center;">
-              <p style="margin:0;color:#ffffff;font-size:20px;font-weight:700;">KR Global Solutions LTD</p>
-              <p style="margin:6px 0 0;color:#94a3b8;font-size:13px;">orders@krglobalsolutionsltd.com</p>
-            </td>
-          </tr>
-
-          <tr>
-            <td style="padding:32px 32px 24px;border-bottom:1px solid #f1f5f9;">
-              <p style="margin:0 0 6px;color:#64748b;font-size:14px;">Bonjour ${escapeHtml(firstName)},</p>
-              <h1 style="margin:0 0 12px;font-size:24px;color:#0f172a;line-height:1.3;">Votre site est prêt 🎉</h1>
-              <p style="margin:0;color:#475569;font-size:15px;line-height:1.6;">
-                Notre équipe a terminé la réalisation de votre site web. Il est en ligne et accessible dès maintenant.
-              </p>
-            </td>
-          </tr>
-
-          <tr>
-            <td style="padding:24px 32px;border-bottom:1px solid #f1f5f9;">
-              <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.5px;">Votre site</h2>
-              <table width="100%" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px 20px;">
-                    <p style="margin:0 0 4px;font-size:12px;color:#16a34a;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">En ligne ✓</p>
-                    <a href="${escapeHtml(siteUrl)}" style="font-size:17px;font-weight:700;color:#0f172a;text-decoration:none;word-break:break-all;">
-                      ${escapeHtml(siteUrl)}
-                    </a>
-                  </td>
-                </tr>
-              </table>
-              <p style="margin:10px 0 0;font-size:13px;color:#64748b;">Commande n° ${escapeHtml(orderNumber)}</p>
-            </td>
-          </tr>
-
-          <tr>
-            <td style="padding:24px 32px;border-bottom:1px solid #f1f5f9;">
-              <h2 style="margin:0 0 14px;font-size:15px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.5px;">Documents joints</h2>
-              <table cellpadding="0" cellspacing="0">
-                <tr><td style="padding:4px 0;font-size:14px;color:#475569;">📄 <strong>Guide client</strong> — Gérer et faire évoluer votre site</td></tr>
-                <tr><td style="padding:4px 0;font-size:14px;color:#475569;">💰 <strong>Grille tarifaire</strong> — Ajouts, évolutions et maintenance</td></tr>
-              </table>
-              <p style="margin:10px 0 0;font-size:13px;color:#94a3b8;">
-                Disponibles aussi en ligne :
-                <a href="${escapeHtml(appUrl)}/api/pdfs/guide-client" style="color:#64748b;">Guide client</a>
-                &nbsp;·&nbsp;
-                <a href="${escapeHtml(appUrl)}/api/pdfs/grille-tarifaire" style="color:#64748b;">Grille tarifaire</a>
-              </p>
-            </td>
-          </tr>
-
-          <tr>
-            <td style="padding:24px 32px;border-bottom:1px solid #f1f5f9;background:#fffbeb;">
-              <p style="margin:0;font-size:14px;color:#92400e;line-height:1.6;">
-                💡 <strong>Rappel :</strong> Une correction mineure est incluse. Contactez-nous avec vos remarques.
-              </p>
-            </td>
-          </tr>
-
-          <tr>
-            <td style="padding:24px 32px;border-bottom:1px solid #f1f5f9;">
-              <h2 style="margin:0 0 14px;font-size:15px;font-weight:700;color:#0f172a;text-transform:uppercase;letter-spacing:0.5px;">Nous contacter</h2>
-              <table cellpadding="0" cellspacing="0">
-                <tr>
-                  <td style="padding-bottom:8px;">
-                    <a href="${escapeHtml(whatsappUrl)}" style="display:inline-block;background:#25d366;color:#ffffff;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">
-                      💬 Écrire sur WhatsApp
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <a href="${escapeHtml(calendlyUrl)}" style="display:inline-block;background:#0f172a;color:#ffffff;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px;text-decoration:none;">
-                      📅 Réserver un appel gratuit
-                    </a>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <tr>
-            <td style="padding:20px 32px;text-align:center;">
-              <p style="margin:0;font-size:14px;color:#475569;">Merci pour votre confiance,<br /><strong>KR Global Solutions LTD</strong></p>
-              <p style="margin:8px 0 0;font-size:12px;color:#94a3b8;">Réf. ${escapeHtml(orderNumber)}</p>
-            </td>
-          </tr>
-
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
 }
 
 async function markOrderDelivered(orderNumber: string) {
@@ -170,12 +52,13 @@ async function markOrderDelivered(orderNumber: string) {
 }
 
 export async function POST(request: Request) {
-  // Auth check
   if (!verifyAdminSecret(request)) {
     return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
   }
 
   try {
+    getRequiredEnvironmentVariable('NEXT_PUBLIC_APP_URL'); // FIXED: validate env var before sending email
+
     const body = await request.json();
     const parsed = deliverySchema.safeParse(body);
 
@@ -187,32 +70,34 @@ export async function POST(request: Request) {
     }
 
     const { order_number, customer_email, customer_name, site_url } = parsed.data;
-    const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? '').replace(/\/$/, '');
 
-    // Generate PDFs in parallel
-    const [guideBytes, grilleBytes] = await Promise.all([
-      generateGuideClientPdf(),
-      generateGrilleTarifairePdf()
-    ]);
+    // FIXED: build minimal BriefRecord so sendCustomerDeliveryEmail can use the shared template
+    // Only customer.fullName, customer.email and id are used by the template; all other fields default to empty
+    const minimalBrief: BriefRecord = {
+      id: order_number,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      status: 'delivered',
+      source: 'admin',
+      customer: { fullName: customer_name, email: customer_email, phoneOrWhatsapp: '' },
+      business: { businessName: '', activityType: '', activityDescription: '', mainGoal: '', targetAudience: '' },
+      offer: { mainOffer: '', showPrice: '', mainCTA: '', secondaryServices: '' },
+      design: { desiredStyle: '', desiredColors: '', inspirationSite1: '', inspirationSite2: '', hasLogo: false, hasPhotos: false },
+      content: { heroTitle: '', subtitle: '', keyArguments: '', hasTestimonials: false, wantsFAQ: false, mandatoryInformation: '' },
+      contact: { publicEmail: '', publicPhone: '', publicWhatsapp: '', instagramUrl: '', facebookUrl: '', tiktokUrl: '', hasExistingDomain: false, desiredDomain: '' },
+      assets: { logoFileNames: [], photoFileNames: [] },
+      payment: { stripeSessionId: null, paymentStatus: 'paid', amountTotal: null, currency: null, paidAt: null },
+      delivery: withDefaultBriefDelivery()
+    };
 
-    const attachments = [
-      {
-        filename: 'guide-client-kr-global-solutions.pdf',
-        content: Buffer.from(guideBytes).toString('base64')
-      },
-      {
-        filename: 'grille-tarifaire-evolutions-site.pdf',
-        content: Buffer.from(grilleBytes).toString('base64')
-      }
-    ];
+    const delivery = withDefaultBriefDelivery({ siteUrl: site_url });
 
-    const html = buildDeliveryHtml({ customerName: customer_name, siteUrl: site_url, orderNumber: order_number, appUrl });
-
-    await sendEmailWithResend({
-      to: customer_email,
-      subject: `Votre site est prêt — commande ${order_number}`,
-      html,
-      attachments
+    // FIXED: sendCustomerDeliveryEmail handles PDF generation, HTML template, and plain-text body internally
+    await sendCustomerDeliveryEmail({
+      brief: minimalBrief,
+      delivery,
+      customerEmail: customer_email,
+      deliveredAt: new Date().toISOString()
     });
 
     // Update delivery status asynchronously (non-blocking)
@@ -220,12 +105,7 @@ export async function POST(request: Request) {
 
     console.info(`[send-delivery] Delivery email sent to ${customer_email} for order ${order_number}.`);
 
-    return NextResponse.json({
-      success: true,
-      order_number,
-      customer_email,
-      attachments_count: attachments.length
-    });
+    return NextResponse.json({ success: true, order_number, customer_email });
   } catch (error) {
     captureApiException(error, { route: '/api/admin/send-delivery', feature: 'admin_delivery' });
     console.error('[send-delivery] Failed.', error);

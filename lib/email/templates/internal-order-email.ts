@@ -68,7 +68,7 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
     <h2 style="font-size:16px;margin:20px 0 8px;">Résumé brief</h2>
     <table style="border-collapse:collapse;width:100%;font-size:14px;">
       ${row('Nom activité', normalizeValue(brief.business.businessName))}
-      ${row('Type d’activité', normalizeValue(brief.business.activityType))}
+      ${row("Type d’activité", normalizeValue(brief.business.activityType))}
       ${row('Objectif principal', normalizeValue(brief.business.mainGoal))}
       ${row('Offre principale', normalizeValue(brief.offer.mainOffer))}
       ${row('CTA principal', normalizeValue(brief.offer.mainCTA))}
