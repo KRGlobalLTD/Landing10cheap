@@ -3,6 +3,7 @@ import type { BriefRecord } from '@/lib/types/brief';
 import type { OrderRecord } from '@/lib/types/order';
 import { sendEmailWithResend } from '@/lib/email/resend';
 import { buildInternalOrderEmailTemplate } from '@/lib/email/templates/internal-order-email';
+import { updateBrief } from '@/lib/briefs'; // FIXED: import pour sauvegarder CLIENT.md dans brief.internalNotes
 
 function getRequiredEnvironmentVariable(name: 'INTERNAL_NOTIFICATION_EMAIL' | 'NEXT_PUBLIC_APP_URL') {
   const value = process.env[name];
@@ -38,6 +39,16 @@ export async function sendInternalOrderEmail(params: { brief: BriefRecord | null
     warnings: internalBrief?.warnings ?? [], // FIXED: fallback when no brief
     links
   });
+
+  // FIXED: sauvegarde du CLIENT.md dans brief.internalNotes pour accès depuis l'admin
+  if (brief && template.clientMd) {
+    try {
+      await updateBrief(brief.id, { internalNotes: template.clientMd });
+      console.info(`[brief] CLIENT.md saved to brief.internalNotes for brief ${brief.id}.`);
+    } catch (error) {
+      console.warn(`[brief] Failed to save CLIENT.md to internalNotes for brief ${brief.id}.`, error);
+    }
+  }
 
   return sendEmailWithResend({
     to,

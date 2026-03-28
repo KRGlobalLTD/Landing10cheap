@@ -9,6 +9,7 @@ export const runtime = 'nodejs';
 const payloadSchema = z.object({
   customerEmail: z.string().trim().email().optional(),
   businessName: z.string().trim().min(1).max(120).optional(),
+  briefId: z.string().trim().uuid().optional(), // FIXED: accept briefId from checkout page to embed in Stripe metadata
 });
 
 export async function POST(request: Request) {
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Payload invalide.' }, { status: 400 });
     }
 
-    const { customerEmail, businessName } = parsed.data;
+    const { customerEmail, businessName, briefId } = parsed.data;
     const stripe = getStripeServerClient();
 
     const paymentIntent = await stripe.paymentIntents.create({
@@ -31,6 +32,7 @@ export async function POST(request: Request) {
         ...PAYMENT_METADATA,
         customerEmail: customerEmail ?? '',
         businessName: businessName ?? '',
+        briefId: briefId ?? '', // FIXED: briefId in Stripe metadata — webhook reads it to retrieve the full brief
       },
     });
 

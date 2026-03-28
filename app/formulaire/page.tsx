@@ -75,11 +75,30 @@ function FormulairePageInner() {
     setIsLoading(true);
     setSubmitError(null);
     try {
+      // FIXED: save all form fields to Supabase before redirecting to payment
+      // File objects (logoFile, photosExemples) cannot be JSON-serialized — excluded here
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { logoFile: _logoFile, photosExemples: _photosExemples, ...serializableData } = data;
+
+      const res = await fetch('/api/briefs/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(serializableData),
+      });
+
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({})) as { error?: string };
+        throw new Error(json.error ?? 'Erreur lors de la sauvegarde du formulaire.');
+      }
+
+      const { briefId } = await res.json() as { briefId: string }; // FIXED: receive briefId from Supabase
+
       const params = new URLSearchParams();
       if (data.email) params.set('email', data.email);
       if (data.prenom) params.set('prenom', data.prenom);
       const business = data.nomEntreprise || data.typeProjet;
       if (business) params.set('business', business);
+      if (briefId) params.set('briefId', briefId); // FIXED: pass briefId to checkout so it lands in Stripe metadata
       navigateTo(`/checkout?${params.toString()}`);
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.');

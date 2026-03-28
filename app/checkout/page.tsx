@@ -205,11 +205,12 @@ function CheckoutPageInner() {
   useEffect(() => {
     const email = searchParams.get('email') ?? undefined;
     const business = searchParams.get('business') ?? undefined;
+    const briefId = searchParams.get('briefId') ?? undefined; // FIXED: read briefId saved before payment
 
     fetch('/api/create-payment-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ customerEmail: email, businessName: business }),
+      body: JSON.stringify({ customerEmail: email, businessName: business, briefId }), // FIXED: pass briefId into Stripe metadata
     })
       .then((res) => res.json())
       .then((data) => {

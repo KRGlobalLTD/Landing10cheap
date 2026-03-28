@@ -4,6 +4,7 @@ type InternalOrderEmailTemplate = {
   subject: string;
   html: string;
   text: string;
+  clientMd: string; // FIXED: added for Supabase brief.internalNotes persistence
 };
 
 function escapeHtml(value: string) {
@@ -51,7 +52,8 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
   // FIXED: resolve all values from brief when available, fallback to order fields when brief is null
   const clientName         = normalizeValue(brief?.customer.fullName);
   const clientEmail        = normalizeValue(brief?.customer.email, normalizeValue(order.customerEmail));
-  const clientPhone        = normalizeValue(brief?.customer.phoneOrWhatsapp);
+  const clientPhone        = normalizeValue(brief?.customer.phoneOrWhatsapp); // FIXED: téléphone client toujours affiché
+  const orderNumber        = order.orderNumber ?? 'En cours de génération'; // FIXED: numéro de commande ajouté
   const businessName       = normalizeValue(brief?.business.businessName, normalizeValue(order.businessName));
   const activityType       = normalizeValue(brief?.business.activityType);
   const activityDesc       = normalizeValue(brief?.business.activityDescription);
@@ -66,7 +68,9 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
   const inspiration1       = normalizeValue(brief?.design.inspirationSite1);
   const inspiration2       = normalizeValue(brief?.design.inspirationSite2);
   const hasLogo            = brief ? (brief.design.hasLogo ? 'Oui' : 'Non') : 'Non renseigné';
+  const logoFiles          = brief?.assets.logoFileNames.join(', ') || 'Aucun'; // FIXED: déplacé dans la section Design
   const hasPhotos          = brief ? (brief.design.hasPhotos ? 'Oui' : 'Non') : 'Non renseigné';
+  const photoFiles         = brief?.assets.photoFileNames.join(', ') || 'Aucun'; // FIXED: déplacé dans la section Design
   const heroTitle          = normalizeValue(brief?.content.heroTitle);
   const subtitle           = normalizeValue(brief?.content.subtitle);
   const keyArguments       = normalizeValue(brief?.content.keyArguments);
@@ -84,8 +88,6 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
         ? 'Domaine existant'
         : (brief.contact.desiredDomain.trim() ? `Souhaité : ${brief.contact.desiredDomain}` : 'Non défini'))
     : 'Non renseigné';
-  const logoFiles          = brief?.assets.logoFileNames.join(', ') || 'Aucun';
-  const photoFiles         = brief?.assets.photoFileNames.join(', ') || 'Aucun';
 
   const subject = noBrief // FIXED: explicit subject when brief is missing so it's visible in inbox
     ? `⚠️ Commande sans brief — ${clientEmail}`
@@ -109,7 +111,9 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
     `Style souhaité : ${desiredStyle}`,
     `Couleurs souhaitées : ${desiredColors}`,
     `Logo fourni : ${hasLogo}`,
+    `Fichiers logo : ${logoFiles}`,
     `Photos fournies : ${hasPhotos}`,
+    `Fichiers photos : ${photoFiles}`,
     `Site inspiration 1 : ${inspiration1}`,
     `Site inspiration 2 : ${inspiration2}`,
     `Titre hero : ${heroTitle}`,
@@ -125,10 +129,68 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
     `Facebook : ${facebookUrl}`,
     `TikTok : ${tiktokUrl}`,
     `Domaine : ${domainInfo}`,
-    `Fichiers logo : ${logoFiles}`,
-    `Fichiers photos : ${photoFiles}`,
     '--- FIN DU PROMPT ---'
   ].join('\n');
+
+  // FIXED: CLIENT.md prérempli avec toutes les données du brief pour Claude Code
+  const clientMd = [
+    '---',
+    '# Génération site client — KR Global Solutions LTD',
+    '',
+    '## Infos client',
+    `- Nom : ${clientName}`,
+    `- Email : ${clientEmail}`,
+    `- Téléphone : ${clientPhone}`,
+    `- Numéro de commande : ${orderNumber}`,
+    '',
+    '## Activité',
+    `- Secteur : ${activityType}`,
+    `- Description : ${activityDesc}`,
+    `- Public cible : ${targetAudience}`,
+    '',
+    '## Contenu du site',
+    `- Titre hero : ${heroTitle}`,
+    `- Sous-titre : ${subtitle}`,
+    `- Arguments clés : ${keyArguments}`,
+    `- Services secondaires : ${secondarySvcs}`,
+    `- Afficher les prix : ${showPrice}`,
+    `- Témoignages : ${hasTestimonials}`,
+    `- FAQ : ${wantsFAQ}`,
+    `- Infos obligatoires : ${mandatoryInfo}`,
+    '',
+    '## Design',
+    `- Couleurs : ${desiredColors}`,
+    `- Inspiration 1 : ${inspiration1}`,
+    `- Inspiration 2 : ${inspiration2}`,
+    `- Logo fourni : ${hasLogo} — ${logoFiles}`,
+    `- Photos fournies : ${hasPhotos} — ${photoFiles}`,
+    '',
+    '## Contact public',
+    `- Email : ${publicContactEmail}`,
+    `- Téléphone : ${publicPhone}`,
+    `- WhatsApp : ${publicWhatsapp}`,
+    `- Instagram : ${instagramUrl}`,
+    `- Facebook : ${facebookUrl}`,
+    `- TikTok : ${tiktokUrl}`,
+    `- Domaine : ${domainInfo}`,
+    '',
+    '## Instructions Claude Code',
+    "Tu es un développeur senior expert Next.js 14, TypeScript, Tailwind CSS, Framer Motion.",
+    'Génère un site vitrine complet et professionnel pour ce client.',
+    'Stack : Next.js 14 App Router, TypeScript, Tailwind, Framer Motion, shadcn/ui.',
+    'Responsive mobile-first obligatoire.',
+    "Sections : Hero, Services, À propos, Témoignages (si oui), FAQ (si oui), Contact, Footer.",
+    'SEO complet. Images optimisées next/image. Déploiement Vercel.',
+    '---'
+  ].join('\n');
+
+  // FIXED: commande curl préremplie sur une seule ligne pour envoyer l'email de livraison
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? '').replace(/\/$/, '');
+  const adminSecret = process.env.ADMIN_SECRET ?? 'ADMIN_SECRET';
+  const curlOrderNumber = (order.orderNumber ?? '').replace(/"/g, '\\"');
+  const curlEmail = clientEmail.replace(/"/g, '\\"');
+  const curlName = clientName.replace(/"/g, '\\"');
+  const curlCmd = `curl -X POST ${appUrl}/api/admin/send-delivery -H "Content-Type: application/json" -H "Authorization: Bearer ${adminSecret}" -d '{"order_number":"${curlOrderNumber}","customer_email":"${curlEmail}","customer_name":"${curlName}","site_url":"COLLER_URL_ICI"}'`; // FIXED: sur une seule ligne sans retour chariot
 
   const html = `
   <div style="font-family:Arial,Helvetica,sans-serif;color:#0f172a;line-height:1.5;max-width:760px;margin:0 auto;padding:16px;">
@@ -155,6 +217,7 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
       ${row('Nom client', clientName)}
       ${row('Email client', clientEmail)}
       ${row('Téléphone / WhatsApp', clientPhone)}
+      ${row('Numéro de commande', orderNumber)}
     </table>
 
     <h2 style="font-size:16px;margin:20px 0 8px;">Activité &amp; projet</h2>
@@ -178,10 +241,12 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
     <table style="border-collapse:collapse;width:100%;font-size:14px;">
       ${row('Style souhaité', desiredStyle)}
       ${row('Couleurs souhaitées', desiredColors)}
-      ${row('Logo fourni', hasLogo)}
-      ${row('Photos fournies', hasPhotos)}
       ${row('Site inspiration 1', inspiration1)}
       ${row('Site inspiration 2', inspiration2)}
+      ${row('Logo fourni', hasLogo)}
+      ${row('Fichiers logo', logoFiles)}
+      ${row('Photos fournies', hasPhotos)}
+      ${row('Fichiers photos', photoFiles)}
     </table>
 
     <h2 style="font-size:16px;margin:20px 0 8px;">Contenu</h2>
@@ -205,12 +270,6 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
       ${row('Domaine', domainInfo)}
     </table>
 
-    <h2 style="font-size:16px;margin:20px 0 8px;">Assets</h2>
-    <table style="border-collapse:collapse;width:100%;font-size:14px;">
-      ${row('Fichiers logo', logoFiles)}
-      ${row('Fichiers photos', photoFiles)}
-    </table>
-
     <h2 style="font-size:16px;margin:20px 0 8px;">Qualité des infos</h2>
     <table style="border-collapse:collapse;width:100%;font-size:14px;">
       ${row('Niveau de complétude', payload.completionLevel)}
@@ -227,6 +286,13 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
 
     <h2 style="font-size:16px;margin:20px 0 8px;">Prompt prêt à copier-coller</h2>
     <pre style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:16px;font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-word;font-family:monospace;">${escapeHtml(promptLines)}</pre>
+
+    <h2 style="font-size:16px;margin:20px 0 8px;">CLIENT.md — à copier pour Claude Code</h2>
+    <pre style="background:#1a1a1a;color:#e2e8f0;border-radius:6px;padding:16px;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;font-family:monospace;overflow-x:auto;">${escapeHtml(clientMd)}</pre>
+
+    <h2 style="font-size:16px;margin:20px 0 8px;">Envoyer l'email de livraison</h2>
+    <p style="margin:0 0 8px;font-size:14px;">➡ Remplace <code>COLLER_URL_ICI</code> par l'URL du site terminé, puis copie-colle dans le terminal.</p>
+    <pre style="background:#1a1a1a;color:#00ff88;border-radius:6px;padding:16px;font-size:13px;line-height:1.6;white-space:pre;font-family:monospace;overflow-x:auto;">${escapeHtml(curlCmd)}</pre>
   </div>
   `;
 
@@ -246,6 +312,7 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
     `Nom client: ${clientName}`,
     `Email client: ${clientEmail}`,
     `Téléphone / WhatsApp: ${clientPhone}`,
+    `Numéro de commande: ${orderNumber}`, // FIXED: ajout numéro de commande dans la version texte
     '',
     '=== ACTIVITÉ & PROJET ===',
     `Nom activité: ${businessName}`,
@@ -263,10 +330,12 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
     '=== DESIGN ===',
     `Style souhaité: ${desiredStyle}`,
     `Couleurs souhaitées: ${desiredColors}`,
-    `Logo fourni: ${hasLogo}`,
-    `Photos fournies: ${hasPhotos}`,
     `Site inspiration 1: ${inspiration1}`,
     `Site inspiration 2: ${inspiration2}`,
+    `Logo fourni: ${hasLogo}`,
+    `Fichiers logo: ${logoFiles}`, // FIXED: déplacé depuis Assets
+    `Photos fournies: ${hasPhotos}`,
+    `Fichiers photos: ${photoFiles}`, // FIXED: déplacé depuis Assets
     '',
     '=== CONTENU ===',
     `Titre hero: ${heroTitle}`,
@@ -285,10 +354,6 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
     `TikTok: ${tiktokUrl}`,
     `Domaine: ${domainInfo}`,
     '',
-    '=== ASSETS ===',
-    `Fichiers logo: ${logoFiles}`,
-    `Fichiers photos: ${photoFiles}`,
-    '',
     '=== QUALITÉ DES INFOS ===',
     `Niveau de complétude: ${payload.completionLevel}`,
     `Warnings principaux: ${warnings.length > 0 ? warnings.join(' | ') : 'Aucun warning explicite'}`,
@@ -300,12 +365,19 @@ export function buildInternalOrderEmailTemplate(payload: InternalOrderEmailPaylo
       `PDF brief: ${links.pdfUrl}`,
       ''
     ] : []),
-    promptLines
+    promptLines,
+    '',
+    '=== CLIENT.md ===',
+    clientMd,
+    '',
+    '=== CURL LIVRAISON ===',
+    curlCmd
   ].filter((line) => line !== undefined).join('\n');
 
   return {
     subject,
     html,
-    text: textLines
+    text: textLines,
+    clientMd // FIXED: retourné pour sauvegarde dans brief.internalNotes
   };
 }
