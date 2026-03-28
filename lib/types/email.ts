@@ -24,7 +24,7 @@ export type EmailSendResult = {
 };
 
 export type InternalOrderEmailPayload = {
-  brief: BriefRecord;
+  brief: BriefRecord | null; // FIXED: null when payment happens without a Supabase brief (new PaymentIntent flow)
   order: OrderRecord;
   completionLevel: 'high' | 'medium' | 'low';
   warnings: string[];

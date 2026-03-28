@@ -111,8 +111,12 @@ async function syncBriefFromCheckoutSession(session: Stripe.Checkout.Session, st
 async function maybeSendInternalOrderEmail(params: { order: OrderRecord; brief: BriefRecord | null }) {
   const { order, brief } = params;
 
-  if (!brief || order.status !== 'paid') {
+  if (order.status !== 'paid') { // FIXED: removed !brief guard — email must fire even without a brief
     return;
+  }
+
+  if (!brief) { // FIXED: log a warning instead of silently returning — root cause of missing internal emails
+    console.warn(`[email] No brief found for session ${order.stripeSessionId} (PaymentIntent flow without Supabase brief). Sending internal email with order data only.`);
   }
 
   if (order.notifications?.internalOrderEmail?.sentAt) {

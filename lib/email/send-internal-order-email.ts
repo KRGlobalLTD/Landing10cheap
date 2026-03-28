@@ -18,23 +18,24 @@ function buildAbsoluteUrl(baseUrl: string, path: string) {
   return `${baseUrl.replace(/\/$/, '')}${path}`;
 }
 
-export async function sendInternalOrderEmail(params: { brief: BriefRecord; order: OrderRecord }) {
+export async function sendInternalOrderEmail(params: { brief: BriefRecord | null; order: OrderRecord }) { // FIXED: brief is nullable when payment happens without a Supabase brief
   const { brief, order } = params;
   const baseUrl = getRequiredEnvironmentVariable('NEXT_PUBLIC_APP_URL');
   const to = getRequiredEnvironmentVariable('INTERNAL_NOTIFICATION_EMAIL');
 
-  const internalBrief = mapBriefToInternalBrief(brief);
-  const links = {
+  // FIXED: only map brief when it exists — new PaymentIntent flow has no brief
+  const internalBrief = brief ? mapBriefToInternalBrief(brief) : null;
+  const links = brief ? { // FIXED: only build brief links when brief exists
     briefUrl: buildAbsoluteUrl(baseUrl, `/briefs/${brief.id}`),
     promptUrl: buildAbsoluteUrl(baseUrl, `/briefs/${brief.id}/prompt`),
     pdfUrl: buildAbsoluteUrl(baseUrl, `/api/briefs/${brief.id}/pdf`)
-  };
+  } : { briefUrl: '', promptUrl: '', pdfUrl: '' };
 
   const template = buildInternalOrderEmailTemplate({
     brief,
     order,
-    completionLevel: internalBrief.summary.completionLevel,
-    warnings: internalBrief.warnings,
+    completionLevel: internalBrief?.summary.completionLevel ?? 'low', // FIXED: fallback when no brief
+    warnings: internalBrief?.warnings ?? [], // FIXED: fallback when no brief
     links
   });
 
